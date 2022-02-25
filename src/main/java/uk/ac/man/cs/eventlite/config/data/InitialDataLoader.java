@@ -8,8 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import uk.ac.man.cs.eventlite.dao.EventRepository;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
+import uk.ac.man.cs.eventlite.entities.Event;
 
 @Configuration
 @Profile("default")
@@ -22,6 +24,9 @@ public class InitialDataLoader {
 
 	@Autowired
 	private VenueService venueService;
+	
+	@Autowired
+	private EventRepository eventRepository; 
 
 	@Bean
 	CommandLineRunner initDatabase() {
@@ -35,7 +40,11 @@ public class InitialDataLoader {
 			if (eventService.count() > 0) {
 				log.info("Database already populated with events. Skipping event initialization.");
 			} else {
-				// Build and save initial events here.
+				Event testEvent = new Event();
+				testEvent.setName("Event test 1");
+				eventRepository.save(testEvent);
+				
+				
 			}
 		};
 	}
