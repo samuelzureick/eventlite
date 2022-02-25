@@ -21,4 +21,8 @@ public class VenueServiceImpl implements VenueService {
 		return venueRepository.findAll();
 	}
 
+	@Override
+	public void save(Venue venue) {
+		venueRepository.save(venue);
+	}
 }
