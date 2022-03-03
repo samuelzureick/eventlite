@@ -1,5 +1,8 @@
 package uk.ac.man.cs.eventlite.config.data;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import uk.ac.man.cs.eventlite.dao.EventRepository;
 import uk.ac.man.cs.eventlite.dao.EventService;
-import uk.ac.man.cs.eventlite.dao.VenueRepository;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
@@ -19,54 +20,56 @@ import uk.ac.man.cs.eventlite.entities.Venue;
 @Profile("test")
 public class TestDataLoader {
 
-	private final static Logger log = LoggerFactory.getLogger(TestDataLoader.class);
+    private final static Logger log = LoggerFactory.getLogger(TestDataLoader.class);
 
-	@Autowired
-	private EventService eventService;
+    @Autowired
+    private EventService eventService;
 
-	@Autowired
-	private VenueService venueService;
-	
-	@Autowired
-	private EventRepository eventRepository;
-	
-	@Autowired
-	private VenueRepository venueRepository;
+    @Autowired
+    private VenueService venueService;
 
-	@Bean
-	CommandLineRunner initDatabase() {
-		return args -> {
-			if (venueService.count() > 0) {
-				log.info("Database already populated with venues. Skipping venue initialization.");
-			} else {
-				Venue testVenue1 = new Venue();
-				testVenue1.setName("Kilburn Building");
-				testVenue1.setCapacity(120);
-				venueRepository.save(testVenue1);
-				Venue testVenue2 = new Venue();
-				testVenue2.setName("Online");
-				testVenue2.setCapacity(100000);
-				venueRepository.save(testVenue2);
-			}
-
-			if (eventService.count() > 0) {
-				log.info("Database already populated with events. Skipping event initialization.");
-			} else {
-				Event testEvent1 = new Event();
-				testEvent1.setName("COMP23412 Showcase, group F");
-				testEvent1.setVenue(1);
-				eventRepository.save(testEvent1);
-				
-				Event testEvent2 = new Event();
-				testEvent2.setName("COMP23412 Showcase, group G");
-				testEvent2.setVenue(1);
-				eventRepository.save(testEvent2);
-
-				Event testEvent3 = new Event();
-				testEvent3.setName("COMP23412 Showcase, group H");
-				testEvent3.setVenue(1);
-				eventRepository.save(testEvent3);
-
-		}
-	};
-}}
+    @Bean
+    CommandLineRunner initDatabase() {
+        return args -> {
+            // Build and save initial venues here.
+            Venue venue = new Venue();
+            venue.setId(1);
+            venue.setName("Venue 1");
+            venue.setCapacity(100);
+            venueService.save(venue);
+            Venue venue2 = new Venue();
+            venue2.setId(2);
+            venue2.setName("Venue 2");
+            venue2.setCapacity(200);
+            venueService.save(venue2);
+            Venue venue3 = new Venue();
+            venue3.setId(3);
+            venue3.setName("Venue 3");
+            venue3.setCapacity(300);
+            venueService.save(venue3);
+            
+            // Build and save initial events here.
+            Event event1 = new Event();
+            event1.setId(1);
+            event1.setName("Event 1");
+            event1.setVenue(venue);
+            event1.setTime(LocalTime.now());
+            event1.setDate(LocalDate.now());
+            eventService.save(event1);
+            Event event2 = new Event();
+            event2.setId(2);
+            event2.setName("Event 2");
+            event2.setVenue(venue2);
+            event2.setTime(LocalTime.now().plusHours(1));
+            event2.setDate(LocalDate.now().plusDays(1));
+            eventService.save(event2);
+            Event event3 = new Event();
+            event3.setId(3);
+            event3.setName("Event 3");
+            event3.setVenue(venue3);
+            event3.setTime(LocalTime.now().plusHours(2));
+            event3.setDate(LocalDate.now().plusDays(2));
+            eventService.save(event3);
+        };
+    }
+}

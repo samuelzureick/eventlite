@@ -75,8 +75,8 @@ public class Event {
 		this.name = name;
 	}
 
-	public Venue getVenue() {
-		return venue;
+	public long getVenue() {
+		return venue.getId();
 	}
 	
 	public void setVenue(Venue venue) {
