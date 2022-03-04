@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,5 +45,12 @@ public class EventsController {
 		model.addAttribute("events", eventService.findAll());
 
 		return "events/index";
+	}
+	
+	@RequestMapping("/search")
+	public String getSearchEvents(Model model, @RequestParam String keyword) {
+		Iterable<Event> listSearchEvents = eventService.listAll(keyword);
+		model.addAttribute("searchEvents", listSearchEvents);
+		return "events/search";
 	}
 }

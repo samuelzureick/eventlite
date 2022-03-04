@@ -50,6 +50,13 @@ public class EventServiceImpl implements EventService {
 							a.getTime().compareTo(b.getTime()) : 
 								a.getDate().compareTo(b.getDate())));
 		return list;
-		
+	}
+
+	@Override
+	public Iterable<Event> listAll(String keyword){
+		if (keyword != null) {
+			return eventRepository.search(keyword);
+		}
+		return eventRepository.findAll();
 	}
 }
