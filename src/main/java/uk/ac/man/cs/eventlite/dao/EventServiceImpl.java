@@ -24,4 +24,12 @@ public class EventServiceImpl implements EventService {
 	public void save(Event event) {
 		eventRepository.save(event);
 	}
+	
+	@Override
+	public Iterable<Event> listAll(String keyword){
+		if (keyword != null) {
+			return eventRepository.search(keyword);
+		}
+		return eventRepository.findAll();
+	}
 }

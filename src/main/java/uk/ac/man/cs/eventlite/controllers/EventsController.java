@@ -7,11 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
+import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 @Controller
@@ -38,6 +40,14 @@ public class EventsController {
 	public String getAllEvents(Model model) {
 		model.addAttribute("events", eventService.findAll());
 
+		return "events/index";
+	}
+	
+	@RequestMapping("/search")
+	public String getSearchEvents(Model model, @RequestParam String keyword) {
+		Iterable<Event> listSearchEvents = eventService.listAll(keyword);
+		model.addAttribute("searchEvents", listSearchEvents);
+		model.addAttribute("Keyword", keyword);
 		return "events/index";
 	}
 }

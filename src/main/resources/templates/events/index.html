@@ -6,7 +6,17 @@
   <title>All events</title>
 </head>
 <body>
+
   <div layout:fragment="content">
+      <div class="search-container">
+    <form th:action="@{/search}">
+        Search: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
+        &nbsp;
+        <input type="submit" value="Search" />
+        &nbsp;
+    </form>
+  </div>
+  
     <h1>All events</h1>
 
     <table class="table table-striped table-hover">
