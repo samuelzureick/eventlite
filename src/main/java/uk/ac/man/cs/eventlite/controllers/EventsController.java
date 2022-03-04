@@ -47,7 +47,6 @@ public class EventsController {
 	public String getSearchEvents(Model model, @RequestParam String keyword) {
 		Iterable<Event> listSearchEvents = eventService.listAll(keyword);
 		model.addAttribute("searchEvents", listSearchEvents);
-		model.addAttribute("Keyword", keyword);
-		return "events/index";
+		return "events/search";
 	}
 }
