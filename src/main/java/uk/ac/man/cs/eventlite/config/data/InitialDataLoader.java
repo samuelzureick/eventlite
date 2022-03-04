@@ -65,6 +65,7 @@ public class InitialDataLoader {
 	            event1.setVenue(venue);
 	            event1.setTime(LocalTime.now());
 	            event1.setDate(LocalDate.now());
+	            event1.setDescription("One very cool event. Bring your friends!");
 	            eventService.save(event1);
 	            Event event2 = new Event();
 	            event2.setId(2);
@@ -72,6 +73,7 @@ public class InitialDataLoader {
 	            event2.setVenue(venue2);
 	            event2.setTime(LocalTime.now().plusHours(1));
 	            event2.setDate(LocalDate.now().plusDays(1));
+	            event2.setDescription("Another very cool event. Bring your friends two!");
 	            eventService.save(event2);
 	            Event event3 = new Event();
 	            event3.setId(3);
@@ -79,6 +81,7 @@ public class InitialDataLoader {
 	            event3.setVenue(venue3);
 	            event3.setTime(LocalTime.now().plusHours(2));
 	            event3.setDate(LocalDate.now().plusDays(2));
+	            event3.setDescription("A last very cool event. Three your friends!");
 	            eventService.save(event3);
 			}
         };
