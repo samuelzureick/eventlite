@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
+import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 @Controller
@@ -31,7 +32,11 @@ public class EventsController {
 
 	@GetMapping("/{id}")
 	public String getEvent(@PathVariable("id") long id, Model model) {
-		throw new EventNotFoundException(id);
+		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+
+		model.addAttribute("event", event);
+
+		return "events/details";
 	}
 
 	@GetMapping
