@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
+import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
@@ -22,6 +23,9 @@ public class EventsController {
 
 	@Autowired
 	private EventService eventService;
+	
+	@Autowired
+	private VenueService venueService;
 
 	@ExceptionHandler(EventNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
@@ -39,6 +43,17 @@ public class EventsController {
 
 		return "events/details";
 	}
+	
+	@GetMapping("/new")
+	public String newEvent(Model model) {
+		if (!model.containsAttribute("event")) {
+			model.addAttribute("event", new Event());
+		}
+		
+		model.addAttribute("venues", venueService.findAll());
+
+		return "events/new";
+	}
 
 	@GetMapping
 	public String getAllEvents(Model model) {
@@ -46,6 +61,7 @@ public class EventsController {
 
 		return "events/index";
 	}
+	
 	
 	@RequestMapping("/search")
 	public String getSearchEvents(Model model, @RequestParam String keyword) {

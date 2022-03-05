@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>New Event</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Add a new event</h1>
+    
+    <form action="#" th:action="@{/events}" th:object="${event}" method="post">
+      <div class="form-group" th:classappend="${param.error}? has-error">
+        <label for="name">Event name:</label>
+        <input class="form-control" type="text" name="name" id="name" autofocus="autofocus" />
+        <label for="description">Description:</label>
+        <textarea class="form-control" name="description" id="description" autofocus="autofocus"></textarea>
+        <label for="date">Date:</label>
+        <input class="form-control" type="date" name="date" id="date" autofocus="autofocus" />
+        <label for="time">Time:</label>
+        <input class="form-control" type="time" name="time" id="time" autofocus="autofocus" />
+      	<label for="venue">Venue:</label>
+      	<select class="form-control" name="venue" id="venue">
+	      	<option th:each="v : ${venues}"
+	      			th:text="${v.name}">
+			</option>
+		</select>
+      </div>
+    
+      <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
+      <a class="btn btn-warning" role="button" href="/events"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+    </form>
+  </div>
+</body>
+</html>
