@@ -17,4 +17,6 @@ public interface EventService {
 	public Iterable<Event> findAllByOrderByDateTime();
 	
 	public Iterable<Event> listAll(String keyword);
+	
+	public void deleteById(long id);
 }

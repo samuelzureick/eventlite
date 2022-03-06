@@ -25,11 +25,15 @@ public class Security extends WebSecurityConfigurerAdapter {
 	// List the mappings/methods for which no authorisation is required.
 	// By default we allow all GETs and full access to the H2 console.
 	private static final RequestMatcher[] NO_AUTH = { new AntPathRequestMatcher("/webjars/**", "GET"),
-			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**") };
+			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**")};
 	
-	private static final RequestMatcher[] attendee = {new AntPathRequestMatcher("/webjars/**", "GET"), new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**")};
-	private static final RequestMatcher[] organizer = {new AntPathRequestMatcher("/webjars/**", "GET"), new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**"), new AntPathRequestMatcher("/**", "POST"), new AntPathRequestMatcher("/**", "PUT")};
-	
+	private static final RequestMatcher[] attendee = {new AntPathRequestMatcher("/webjars/**", "GET"),
+			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**")};
+	private static final RequestMatcher[] organizer = {new AntPathRequestMatcher("/webjars/**", "GET"),
+			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**"),
+			new AntPathRequestMatcher("/**", "POST"), new AntPathRequestMatcher("/**", "PUT"),
+			new AntPathRequestMatcher("/**", "DELETE")};
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// By default, all requests are authenticated except our specific list.
@@ -64,7 +68,8 @@ public class Security extends WebSecurityConfigurerAdapter {
 		UserDetails mustafa = User.withUsername("Mustafa").password(encoder.encode("Mustafa")).roles(ADMIN_ROLE)
 				.build();
 		UserDetails tom = User.withUsername("Tom").password(encoder.encode("Carroll")).roles(ADMIN_ROLE).build();
+		UserDetails sam = User.withUsername("Sam").password(encoder.encode("Morris")).roles(ORGANIZER_ROLE).build();
 		
-		return new InMemoryUserDetailsManager(rob, caroline, markel, mustafa, tom);
+		return new InMemoryUserDetailsManager(rob, caroline, markel, mustafa, tom, sam);
 	}
 }
