@@ -1,6 +1,8 @@
 package uk.ac.man.cs.eventlite.dao;
 
 import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,5 +66,10 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public void deleteById(long id) {
 		eventRepository.deleteById(id);
+	}
+	
+	@Override
+	public void updateEvent(Event event) {
+		eventRepository.save(event);
 	}
 }

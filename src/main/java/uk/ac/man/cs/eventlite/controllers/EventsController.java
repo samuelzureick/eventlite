@@ -53,6 +53,31 @@ public class EventsController {
 		return "events/details";
 	}
 	
+	@GetMapping("/update/{id}")
+	public String getEventUpdate(@PathVariable("id") long id, Model model) {
+		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+
+		model.addAttribute("event", event);
+		model.addAttribute("venues", venueService.findAll());
+
+		return "events/update";
+	}
+	
+	@PostMapping("/update")
+	public String updateEvent(@ModelAttribute Event event, BindingResult errors,
+			Model model, RedirectAttributes redirectAttrs) {
+
+		if (errors.hasErrors()) {
+			model.addAttribute("event", event);
+			return "/events/update";
+		}
+
+		eventService.save(event);
+		redirectAttrs.addFlashAttribute("ok_message", "Event updated.");
+
+		return "/events/details";
+	}
+	
 	@GetMapping("/new")
 	public String newEvent(Model model) {
 		if (!model.containsAttribute("event")) {
@@ -66,7 +91,7 @@ public class EventsController {
 	
 	@PostMapping("/new")
 	public String createEvent(@ModelAttribute Event event, BindingResult errors,
-			Model model, RedirectAttributes redirectAttrs, @RequestParam("venue") String venue) {
+			Model model, RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("event", event);

@@ -19,4 +19,6 @@ public interface EventService {
 	public Iterable<Event> listAll(String keyword);
 	
 	public void deleteById(long id);
+	
+	public void updateEvent(Event event);
 }
