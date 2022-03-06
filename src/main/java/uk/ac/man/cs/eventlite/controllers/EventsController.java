@@ -95,7 +95,7 @@ public class EventsController {
 	}
 	
 	@DeleteMapping(value = "/{id}")
-	public String deleteGreeting(@PathVariable("id") long id) {
+	public String deleteEvent(@PathVariable("id") long id) {
 		
 		eventService.deleteById(id);
 		
