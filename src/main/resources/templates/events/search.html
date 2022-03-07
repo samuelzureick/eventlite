@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="~{layouts/default}">
 <head>
   <title>Search Results</title>
@@ -26,6 +27,7 @@
           <th><i class="fas fa-map-marker-alt"></i> Venue</th>
           <th><i class="fas fa-calendar"></i> Date</th>
           <th><i class="fas fa-clock"></i> Time</th>
+          <th sec:authorize="hasRole('ORGANIZER')"><i class="fas fa-trash"></i> Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -34,6 +36,11 @@
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
+          <td sec:authorize="hasRole('ORGANIZER')">
+          	<form th:action="@{/events/{id}(id=${e.id})}" th:method="delete">
+		      <button type="submit" class="btn btn-danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
+		    </form>
+          </td>
         </tr>
       </tbody>
     </table>
