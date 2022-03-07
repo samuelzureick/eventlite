@@ -62,12 +62,12 @@ public class Security extends WebSecurityConfigurerAdapter {
 	public UserDetailsService userDetailsService() {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-		UserDetails rob = User.withUsername("Rob").password(encoder.encode("Haines")).roles(ADMIN_ROLE).build();
-		UserDetails caroline = User.withUsername("Caroline").password(encoder.encode("Jay")).roles(ADMIN_ROLE).build();
-		UserDetails markel = User.withUsername("Markel").password(encoder.encode("Vigo")).roles(ADMIN_ROLE).build();
-		UserDetails mustafa = User.withUsername("Mustafa").password(encoder.encode("Mustafa")).roles(ADMIN_ROLE)
+		UserDetails rob = User.withUsername("Rob").password(encoder.encode("Haines")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
+		UserDetails caroline = User.withUsername("Caroline").password(encoder.encode("Jay")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
+		UserDetails markel = User.withUsername("Markel").password(encoder.encode("Vigo")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
+		UserDetails mustafa = User.withUsername("Mustafa").password(encoder.encode("Mustafa")).roles(ADMIN_ROLE, ORGANIZER_ROLE)
 				.build();
-		UserDetails tom = User.withUsername("Tom").password(encoder.encode("Carroll")).roles(ADMIN_ROLE).build();
+		UserDetails tom = User.withUsername("Tom").password(encoder.encode("Carroll")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
 		UserDetails sam = User.withUsername("Sam").password(encoder.encode("Morris")).roles(ORGANIZER_ROLE).build();
 		
 		return new InMemoryUserDetailsManager(rob, caroline, markel, mustafa, tom, sam);

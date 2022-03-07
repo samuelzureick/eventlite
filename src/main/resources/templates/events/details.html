@@ -21,7 +21,7 @@
     <h2> Time </h2>
     <p th:text = ${event.time}>Time</p>
 
-	<p sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
+	<p sec:authorize="hasAnyRole('ORGANIZER')">
       <a class="btn btn-primary" role="button" th:href="'/events/update/'+${event.id}"><i class="fas fa-pen" aria-hidden="true"></i> Update event</a>
     </p>
   </div>
