@@ -25,11 +25,15 @@ public class Security extends WebSecurityConfigurerAdapter {
 	// List the mappings/methods for which no authorisation is required.
 	// By default we allow all GETs and full access to the H2 console.
 	private static final RequestMatcher[] NO_AUTH = { new AntPathRequestMatcher("/webjars/**", "GET"),
-			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**") };
+			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**")};
 	
-	private static final RequestMatcher[] attendee = {new AntPathRequestMatcher("/webjars/**", "GET"), new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**")};
-	private static final RequestMatcher[] organizer = {new AntPathRequestMatcher("/webjars/**", "GET"), new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**"), new AntPathRequestMatcher("/**", "POST"), new AntPathRequestMatcher("/**", "PUT")};
-	
+	private static final RequestMatcher[] attendee = {new AntPathRequestMatcher("/webjars/**", "GET"),
+			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**")};
+	private static final RequestMatcher[] organizer = {new AntPathRequestMatcher("/webjars/**", "GET"),
+			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**"),
+			new AntPathRequestMatcher("/**", "POST"), new AntPathRequestMatcher("/**", "PUT"),
+			new AntPathRequestMatcher("/**", "DELETE")};
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// By default, all requests are authenticated except our specific list.
@@ -58,15 +62,15 @@ public class Security extends WebSecurityConfigurerAdapter {
 	public UserDetailsService userDetailsService() {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-		UserDetails rob = User.withUsername("Rob").password(encoder.encode("Haines")).roles(ADMIN_ROLE).build();
-		UserDetails caroline = User.withUsername("Caroline").password(encoder.encode("Jay")).roles(ADMIN_ROLE).build();
-		UserDetails markel = User.withUsername("Markel").password(encoder.encode("Vigo")).roles(ADMIN_ROLE).build();
-		UserDetails mustafa = User.withUsername("Mustafa").password(encoder.encode("Mustafa")).roles(ADMIN_ROLE)
+		UserDetails rob = User.withUsername("Rob").password(encoder.encode("Haines")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
+		UserDetails caroline = User.withUsername("Caroline").password(encoder.encode("Jay")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
+		UserDetails markel = User.withUsername("Markel").password(encoder.encode("Vigo")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
+		UserDetails mustafa = User.withUsername("Mustafa").password(encoder.encode("Mustafa")).roles(ADMIN_ROLE, ORGANIZER_ROLE)
 				.build();
-		UserDetails tom = User.withUsername("Tom").password(encoder.encode("Carroll")).roles(ADMIN_ROLE).build();
+		UserDetails tom = User.withUsername("Tom").password(encoder.encode("Carroll")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
+		UserDetails sam = User.withUsername("Sam").password(encoder.encode("Morris")).roles(ORGANIZER_ROLE).build();
 		UserDetails ruben = User.withUsername("Ruben").password(encoder.encode("Secret")).roles(ORGANIZER_ROLE).build();
 		UserDetails ryan = User.withUsername("Ryan").password(encoder.encode("software")).roles(ORGANIZER_ROLE).build();
-		
-		return new InMemoryUserDetailsManager(rob, caroline, markel, mustafa, tom, ruben, ryan);
+		return new InMemoryUserDetailsManager(rob, caroline, markel, mustafa, tom, sam, ruben, ryan);
 	}
 }
