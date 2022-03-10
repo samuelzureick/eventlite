@@ -11,16 +11,16 @@
     <h1>Event Detail</h1>
 
 	<div class="form-group">
-	    <label>Event</label>
+	    <label>Event name:</label>
 	    <input class="form-control" type="text" th:value="${event.name}" readonly/>
-	    <label>Description</label>
+	    <label>Description:</label>
 	    <textarea class="form-control" th:value="${event.description}" readonly/></textarea>
-	    <label>Venue</label>
-	    <input class="form-control" type="text" th:value="${event.venue.name}" readonly/>
-	    <label>Date</label>
+	    <label>Date:</label>
 	    <input class="form-control" type="text" th:value="${event.date}" readonly/>
-	    <label>Time</label>
+	    <label>Time:</label>
 	    <input class="form-control" type="text" th:value="${event.time}" readonly/>
+	    <label>Venue:</label>
+	    <input class="form-control" type="text" th:value="${event.venue.name}" readonly/>
 	</div>
 
 	<p sec:authorize="hasAnyRole('ORGANIZER')">
