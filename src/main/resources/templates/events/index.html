@@ -21,7 +21,7 @@
     </form>
   </div>
 
-    <h1>All events</h1>
+    <h1>Future Events</h1>
 
     <table class="table table-striped table-hover">
       <thead>
@@ -33,7 +33,34 @@
         </tr>
       </thead>
       <tbody>
-        <tr th:each="e : ${events}">
+        <tr th:each="e : ${futureEvents}">
+          <td><a th:text="${e.name}" th:href="'/events/'+${e.id}">My Event</a></td>
+          <td th:text="${e.venue.name}">Event venue</td>
+          <td th:text="${{e.date}}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+          <td sec:authorize="hasAnyRole('ORGANIZER')">
+          	<form th:action="@{/events/{id}(id=${e.id})}" th:method="delete">
+		      <button type="submit" class="btn btn-danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
+		    </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <h1>Past Events</h1>
+    
+        <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fas fa-bolt"></i> Event</th>
+          <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+          <th><i class="fas fa-calendar"></i> Date</th>
+          <th><i class="fas fa-clock"></i> Time</th>
+          <th sec:authorize="hasRole('ORGANIZER')"><i class="fas fa-trash"></i> Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="e : ${pastEvents}">
           <td><a th:text="${e.name}" th:href="'/events/'+${e.id}">My Event</a></td>
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
