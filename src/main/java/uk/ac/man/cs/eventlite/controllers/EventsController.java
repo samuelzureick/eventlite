@@ -105,11 +105,16 @@ public class EventsController {
 
 	@GetMapping
 	public String getAllEvents(Model model) {
-		model.addAttribute("events", eventService.findAll());
+		Iterable<Event> events = eventService.findAll();
+		ArrayList<Event> pastEvents = eventService.splitEventPast(events);
+		ArrayList<Event> futureEvents = eventService.splitEventFuture(events);
+		
+		model.addAttribute("pastEvents", pastEvents);
+		model.addAttribute("futureEvents", futureEvents);
 
 		return "events/index";
 	}
-	
+
 	@RequestMapping("/search")
 	public String getSearchEvents(Model model, @RequestParam String keyword) {
 		Iterable<Event> listSearchEvents = eventService.listAll(keyword);
