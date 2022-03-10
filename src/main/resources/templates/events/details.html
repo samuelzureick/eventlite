@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>Event Detail</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Event Detail</h1>
+
+	<div class="form-group">
+	    <label>Event</label>
+	    <input class="form-control" type="text" th:value="${event.name}" readonly/>
+	    <label>Description</label>
+	    <textarea class="form-control" th:value="${event.description}" readonly/></textarea>
+	    <label>Venue</label>
+	    <input class="form-control" type="text" th:value="${event.venue.name}" readonly/>
+	    <label>Date</label>
+	    <input class="form-control" type="text" th:value="${event.date}" readonly/>
+	    <label>Time</label>
+	    <input class="form-control" type="text" th:value="${event.time}" readonly/>
+	</div>
+
+	<p sec:authorize="hasAnyRole('ORGANIZER')">
+      <a class="btn btn-primary" role="button" th:href="'/events/update/'+${event.id}"><i class="fas fa-pen" aria-hidden="true"></i> Update event</a>
+    </p>
+  </div>
+
+</body>
+</html>
