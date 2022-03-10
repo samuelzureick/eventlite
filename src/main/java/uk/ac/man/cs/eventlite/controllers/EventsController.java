@@ -1,5 +1,7 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -111,8 +113,11 @@ public class EventsController {
 	@RequestMapping("/search")
 	public String getSearchEvents(Model model, @RequestParam String keyword) {
 		Iterable<Event> listSearchEvents = eventService.listAll(keyword);
-		model.addAttribute("searchEvents", listSearchEvents);
-		return "events/search";
+		ArrayList<Event> pastEvents = eventService.splitEventPast(listSearchEvents);
+		ArrayList<Event> futureEvents = eventService.splitEventFuture(listSearchEvents);
+		model.addAttribute("pastEvents", pastEvents);
+		model.addAttribute("futureEvents", futureEvents);
+		return "events/index";
 	}
 	
 	@DeleteMapping(value = "/{id}")
