@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,6 +25,7 @@ public class Event {
 	@GeneratedValue
 	private long id;
 
+	@NotEmpty(message = "Date cannot be empty.")
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column()
@@ -32,13 +35,17 @@ public class Event {
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column()
 	private LocalTime time;
-
+	
+	@NotEmpty(message = "Name cannot be empty.")
+	@Size(max = 256, message = "The greeting must have 256 characters or less.")
 	@Column()
 	private String name;
 	
+	@Size(max = 500, message = "The greeting must have 500 characters or less.")
 	@Column()
 	private String description;
 
+	@NotEmpty(message = "Venue cannot be empty.")
 	@ManyToOne
 	@JoinColumn(name="venue")
 	private Venue venue;
