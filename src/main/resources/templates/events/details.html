@@ -23,12 +23,12 @@
 	    <input class="form-control" type="text" th:value="${event.time}" readonly/>
 	</div>
 
-	<p sec:authorize="hasAnyRole('ORGANIZER')">
+	<div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
       <a class="btn btn-primary" role="button" th:href="'/events/update/'+${event.id}"><i class="fas fa-pen" aria-hidden="true"></i> Update event</a>
  	<form th:action="@{/events/{id}(id=${event.id})}" th:method="delete">
 		      <button type="submit" class="btn btn-danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
 		    </form>    
-    </p>
+    </div>
   </div>
 
 </body>
