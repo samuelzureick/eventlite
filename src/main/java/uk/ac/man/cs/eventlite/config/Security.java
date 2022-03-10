@@ -31,15 +31,18 @@ public class Security extends WebSecurityConfigurerAdapter {
 			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**")};
 	private static final RequestMatcher[] organizer = {new AntPathRequestMatcher("/webjars/**", "GET"),
 			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**"),
-			new AntPathRequestMatcher("/**", "POST"), new AntPathRequestMatcher("/**", "PUT"),
-			new AntPathRequestMatcher("/**", "DELETE")};
+			new AntPathRequestMatcher("/**", "POST")
+			};//, new AntPathRequestMatcher("/**", "PUT")
+	
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// By default, all requests are authenticated except our specific list.
+		
 		http.authorizeRequests().requestMatchers(attendee).hasRole(ATTENDEE_ROLE);
-		http.authorizeRequests().requestMatchers(organizer).hasRole(ORGANIZER_ROLE);
-		http.authorizeRequests().requestMatchers(NO_AUTH).permitAll().anyRequest().hasRole(ADMIN_ROLE);
+		http.authorizeRequests().requestMatchers(organizer).hasAnyRole(ORGANIZER_ROLE, ADMIN_ROLE);
+		http.authorizeRequests().requestMatchers(NO_AUTH).permitAll();
+		http.authorizeRequests().anyRequest().hasRole(ADMIN_ROLE);
 		
 		
 		// Use form login/logout for the Web.
@@ -62,7 +65,7 @@ public class Security extends WebSecurityConfigurerAdapter {
 	public UserDetailsService userDetailsService() {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-		UserDetails rob = User.withUsername("Rob").password(encoder.encode("Haines")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
+		UserDetails rob = User.withUsername("Rob").password(encoder.encode("Haines")).roles(ADMIN_ROLE).build();
 		UserDetails caroline = User.withUsername("Caroline").password(encoder.encode("Jay")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
 		UserDetails markel = User.withUsername("Markel").password(encoder.encode("Vigo")).roles(ADMIN_ROLE, ORGANIZER_ROLE).build();
 		UserDetails mustafa = User.withUsername("Mustafa").password(encoder.encode("Mustafa")).roles(ADMIN_ROLE, ORGANIZER_ROLE)
