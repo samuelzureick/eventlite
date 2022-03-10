@@ -15,7 +15,7 @@ import uk.ac.man.cs.eventlite.entities.Event;
 
 @Service
 public class EventServiceImpl implements EventService {
-	
+
 	@Autowired
 	private EventRepository eventRepository;
 
@@ -38,7 +38,7 @@ public class EventServiceImpl implements EventService {
 	public Optional<Event> findById(long id) {
 		return eventRepository.findById(id);
 	}
-	
+
 	@Override
 	public Iterable<Event> findAllByOrderByDateTime(){
 		Iterable<Event> events = eventRepository.findAll();
@@ -61,17 +61,17 @@ public class EventServiceImpl implements EventService {
 		}
 		return eventRepository.findAll();
 	}
-	
+
 	@Override
 	public void deleteById(long id) {
 		eventRepository.deleteById(id);
 	}
-	
+
 	@Override
 	public void updateEvent(Event event) {
 		eventRepository.save(event);
 	}
-	
+
 	@Override
 	public ArrayList<Event> splitEventPast(Iterable<Event> events){
 		ArrayList<Event> pastEvents = new ArrayList<Event>();
@@ -90,7 +90,7 @@ public class EventServiceImpl implements EventService {
 		});
 		return pastEvents;
 	}
-	
+
 	@Override
 	public ArrayList<Event> splitEventFuture(Iterable<Event> events){
 		ArrayList<Event> futureEvents = new ArrayList<Event>();
