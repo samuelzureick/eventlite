@@ -10,16 +10,18 @@
   <div layout:fragment="content">
     <h1>Event Detail</h1>
 
-    <h2> Event </h2>
-    <p th:text = ${event.name}>Name</p>
-    <h2> Description </h2>
-    <p th:text = ${event.description}>Description</p>
-    <h2> Venue </h2>
-    <p th:text = ${event.venue.name}>Venue</p>
-    <h2> Date </h2>
-    <p th:text = ${event.date}>Date</p>
-    <h2> Time </h2>
-    <p th:text = ${event.time}>Time</p>
+	<div class="form-group">
+	    <label>Event name:</label>
+	    <input class="form-control" type="text" th:value="${event.name}" readonly/>
+	    <label>Description:</label>
+	    <textarea class="form-control" th:value="${event.description}" readonly/></textarea>
+	    <label>Date:</label>
+	    <input class="form-control" type="text" th:value="${event.date}" readonly/>
+	    <label>Time:</label>
+	    <input class="form-control" type="text" th:value="${event.time}" readonly/>
+	    <label>Venue:</label>
+	    <input class="form-control" type="text" th:value="${event.venue.name}" readonly/>
+	</div>
 
 	<p sec:authorize="hasAnyRole('ORGANIZER')">
       <a class="btn btn-primary" role="button" th:href="'/events/update/'+${event.id}"><i class="fas fa-pen" aria-hidden="true"></i> Update event</a>
