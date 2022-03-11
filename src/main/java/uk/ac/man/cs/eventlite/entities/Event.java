@@ -31,6 +31,7 @@ public class Event {
 	@Future
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	
 	@Column()
 	private LocalDate date;
 
