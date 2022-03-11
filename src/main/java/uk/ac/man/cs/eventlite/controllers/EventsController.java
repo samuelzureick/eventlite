@@ -63,7 +63,7 @@ public class EventsController {
 	}
 	
 	@PostMapping("/update")
-	public String updateEvent(@ModelAttribute Event event, BindingResult errors,
+	public String updateEvent(@Valid @ModelAttribute Event event, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors()) {
