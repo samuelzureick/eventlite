@@ -28,6 +28,7 @@ public class Event {
 	@NotEmpty(message = "Date cannot be empty.")
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	
 	@Column()
 	private LocalDate date;
 
@@ -37,11 +38,11 @@ public class Event {
 	private LocalTime time;
 	
 	@NotEmpty(message = "Name cannot be empty.")
-	@Size(max = 256, message = "The greeting must have 256 characters or less.")
+	@Size(max = 256, message = "The name must have 256 characters or less.")
 	@Column()
 	private String name;
 	
-	@Size(max = 500, message = "The greeting must have 500 characters or less.")
+	@Size(max = 500, message = "The description must have 500 characters or less.")
 	@Column()
 	private String description;
 
