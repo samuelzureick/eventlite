@@ -14,7 +14,7 @@
 	    <label>Event name:</label>
 	    <input class="form-control" type="text" th:value="${event.name}" readonly/>
 	    <label>Description:</label>
-	    <textarea class="form-control" th:value="${event.description}" readonly/></textarea>
+	    <textarea class="form-control" th:field="${event.description}" readonly/></textarea>
 	    <label>Date:</label>
 	    <input class="form-control" type="text" th:value="${event.date}" readonly/>
 	    <label>Time:</label>
