@@ -1,6 +1,8 @@
 package uk.ac.man.cs.eventlite.dao;
 
-import org.junit.jupiter.api.Disabled;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +17,6 @@ import uk.ac.man.cs.eventlite.EventLite;
 @SpringBootTest(classes = EventLite.class)
 @DirtiesContext
 @ActiveProfiles("test")
-@Disabled
 public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 	@Autowired
@@ -23,4 +24,11 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 
 	// This class is here as a starter for testing any custom methods within the
 	// EventService. Note: It is currently @Disabled!
+	
+	@Test
+	public void countEventTest() {
+		assertEquals(eventService.count(), 3);
+		return;
+		
+	}
 }
