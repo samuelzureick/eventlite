@@ -9,7 +9,7 @@
 <body>
   <div layout:fragment="content">
     <h1>Update Event</h1>
-    
+
     <form action="#" th:action="@{/events/update}" th:object="${event}" method="post">
       <div class="form-group" th:classappend="${param.error}? has-error">
       	<input type="hidden" th:field="*{id}" name="id" id="id" th:value="${event.id}" />
@@ -19,24 +19,23 @@
         <textarea class="form-control" th:field="*{description}" name="description" id="description" autofocus="autofocus"></textarea>
         <label for="venue">Venue:</label>
         <select class="form-control" name="venue" id="venue">
-	      	<option th:text="${event.venue.name}" th:value="${event.venue.id}" selected="selected" th:selected="${event.venue.id} == *{venue}"/>
-	      	<option th:each="v : ${venues}"
-	      			th:unless="${v.name} == ${event.venue.name}"
-	      			th:text="${v.name}"
-	      			th:value="${v.id}"
-	      			th:selected="${v.id} == *{venue}">
-			</option>
+	      <option th:text="${event.venue.name}" th:value="${event.venue.id}" selected="selected" th:selected="${event.venue.id} == *{venue}"/>
+	      <option th:each="v : ${venues}"
+	      		  th:unless="${v.name} == ${event.venue.name}"
+	      		  th:text="${v.name}"
+	      		  th:value="${v.id}"
+	      		  th:selected="${v.id} == *{venue}">
+		  </option>
 		</select>
         <label for="date">Date:</label>
         <input class="form-control" type="date" th:type="date" th:field="*{date}" name="date" id="date" autofocus="autofocus" required/>
         <label for="time">Time:</label>
         <input class="form-control" type="time" th:type="time" th:field="*{time}" name="time" id="time" autofocus="autofocus"/>
       </div>
-    
+
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
       <a class="btn btn-warning" role="button" th:href="'/events/'+${event.id}"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
     </form>
   </div>
-
 </body>
 </html>

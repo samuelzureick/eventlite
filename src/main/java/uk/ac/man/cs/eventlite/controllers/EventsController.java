@@ -1,6 +1,7 @@
 package uk.ac.man.cs.eventlite.controllers;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class EventsController {
 
 	@Autowired
 	private EventService eventService;
-	
+
 	@Autowired
 	private VenueService venueService;
 
@@ -50,7 +51,7 @@ public class EventsController {
 
 		return "events/details";
 	}
-	
+
 	@GetMapping("/update/{id}")
 	public String getEventUpdate(@PathVariable("id") long id, Model model) {
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
@@ -75,18 +76,18 @@ public class EventsController {
 
 		return "/events/details";
 	}
-	
+
 	@GetMapping("/new")
 	public String newEvent(Model model) {
 		if (!model.containsAttribute("event")) {
 			model.addAttribute("event", new Event());
 		}
-		
+
 		model.addAttribute("venues", venueService.findAll());
 
 		return "events/new";
 	}
-	
+
 	@PostMapping("/new")
 	public String createEvent(@Valid @ModelAttribute Event event, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
@@ -106,23 +107,30 @@ public class EventsController {
 
 	@GetMapping
 	public String getAllEvents(Model model) {
-		model.addAttribute("events", eventService.findAll());
+		Iterable<Event> events = eventService.findAll();
+		ArrayList<Event> pastEvents = eventService.splitEventPast(events);
+		ArrayList<Event> futureEvents = eventService.splitEventFuture(events);
+
+		model.addAttribute("pastEvents", pastEvents);
+		model.addAttribute("futureEvents", futureEvents);
 
 		return "events/index";
 	}
-	
+
 	@RequestMapping("/search")
 	public String getSearchEvents(Model model, @RequestParam String keyword) {
 		Iterable<Event> listSearchEvents = eventService.listAll(keyword);
-		model.addAttribute("searchEvents", listSearchEvents);
-		return "events/search";
+		ArrayList<Event> pastEvents = eventService.splitEventPast(listSearchEvents);
+		ArrayList<Event> futureEvents = eventService.splitEventFuture(listSearchEvents);
+		model.addAttribute("pastEvents", pastEvents);
+		model.addAttribute("futureEvents", futureEvents);
+		return "events/index";
 	}
-	
+
 	@DeleteMapping(value = "/{id}")
 	public String deleteEvent(@PathVariable("id") long id) {
-		
 		eventService.deleteById(id);
-		
+
 		return "redirect:/events";
 	}
 }

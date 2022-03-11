@@ -10,23 +10,25 @@
   <div layout:fragment="content">
     <h1>Event Detail</h1>
 
-	<div class="form-group">
-	    <label>Event name:</label>
-	    <input class="form-control" type="text" th:value="${event.name}" readonly/>
-	    <label>Description:</label>
-	    <textarea class="form-control" th:field="${event.description}" readonly/></textarea>
-	    <label>Date:</label>
-	    <input class="form-control" type="text" th:value="${event.date}" readonly/>
-	    <label>Time:</label>
-	    <input class="form-control" type="text" th:value="${event.time}" readonly/>
-	    <label>Venue:</label>
-	    <input class="form-control" type="text" th:value="${event.venue.name}" readonly/>
-	</div>
+    <div class="form-group">
+      <label>Event name:</label>
+      <input class="form-control" type="text" th:value="${event.name}" readonly/>
+      <label>Description:</label>
+      <textarea class="form-control" th:field="${event.description}" readonly/></textarea>
+      <label>Venue:</label>
+      <input class="form-control" type="text" th:value="${event.venue.name}" readonly/>
+      <label>Date:</label>
+      <input class="form-control" type="text" th:value="${{event.date}}" readonly/>
+      <label>Time:</label>
+      <input class="form-control" type="text" th:value="${{event.time}}" readonly/>
+    </div>
 
-	<p sec:authorize="hasAnyRole('ORGANIZER')">
+    <div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
       <a class="btn btn-primary" role="button" th:href="'/events/update/'+${event.id}"><i class="fas fa-pen" aria-hidden="true"></i> Update event</a>
-    </p>
+      <form th:action="@{/events/{id}(id=${event.id})}" th:method="delete" style="display:inline-block;">
+        <button type="submit" class="btn btn-danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
+      </form>
+    </div>
   </div>
-
 </body>
 </html>
