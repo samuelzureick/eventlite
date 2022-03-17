@@ -18,7 +18,12 @@ public class VenueServiceImpl implements VenueService {
 
 	@Override
 	public Iterable<Venue> findAll() {
-		return venueRepository.findAll();
+		return findAllByOrderByName();
+	}
+	
+	@Override
+	public Iterable<Venue> findAllByOrderByName() {
+		return venueRepository.findAllByOrderByName();
 	}
 
 	@Override

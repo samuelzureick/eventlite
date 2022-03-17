@@ -11,4 +11,6 @@ public interface VenueRepository extends CrudRepository<Venue, Long> {
 
 	@Query("SELECT v FROM Venue v WHERE v.name LIKE %?1% OR LOWER(v.name) LIKE %?1%")
 	List<Venue> search(String keyword);
+	
+	List<Venue> findAllByOrderByName();
 }

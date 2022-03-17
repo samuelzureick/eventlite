@@ -25,12 +25,15 @@
       <thead>
         <tr>
           <th><i class="fas fa-map-marker-alt"></i> Venue</th>
-          <th><i class="fas fa-clock"></i> Capacity</th>
+          <th><i class="fas fa-map-marked-alt"></i> Address</th>
+          <th><i class="fas fa-users"></i> Capacity</th>
         </tr>
       </thead>
       <tbody>
         <tr th:each="v : ${venues}">
           <td><a th:text="${v.name}" th:href="'/venues/'+${v.id}">My Venue</a></td>
+          <td>Venue Address</td>
+          <!-- <td th:text="${v.address}">Venue Address</td> -->
           <td th:text="${v.capacity}">Venue capacity</td>
         </tr>
       </tbody>

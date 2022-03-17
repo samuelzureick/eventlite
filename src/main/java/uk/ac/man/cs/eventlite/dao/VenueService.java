@@ -8,6 +8,8 @@ public interface VenueService {
 
 	public Iterable<Venue> findAll();
 	
+	public Iterable<Venue> findAllByOrderByName();
+	
 	public void save(Venue venue);
 	
 	public Iterable<Venue> listAll(String keyword);
