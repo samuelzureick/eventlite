@@ -68,5 +68,32 @@ public class VenuesController {
 		model.addAttribute("venues", listSearchVenues);
 		return "venues/index";
 	}
+	
+	@GetMapping("/new")
+	public String newVenue(Model model) {
+		if (!model.containsAttribute("venue")) {
+			model.addAttribute("venue", new Venue());
+		}
+
+//		model.addAttribute("venues", venueService.findAll());
+
+		return "venues/new";
+	}
+	
+	@PostMapping("/new")
+	public String createEvent(@Valid @ModelAttribute Venue venue, BindingResult errors,
+			Model model, RedirectAttributes redirectAttrs) {
+
+		if (errors.hasErrors()) {
+			System.out.println(errors);
+			model.addAttribute("venue", venue);
+			return "venues/new";
+		}
+
+		venueService.save(venue);
+		redirectAttrs.addFlashAttribute("ok_message", "New venue added.");
+
+		return "redirect:/events";
+	}
 
 }
