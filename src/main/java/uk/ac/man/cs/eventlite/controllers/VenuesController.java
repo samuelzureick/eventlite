@@ -40,9 +40,17 @@ public class VenuesController {
 
 	@ExceptionHandler(VenueNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public String eventNotFoundHandler(VenueNotFoundException ex, Model model) {
+	public String venueNotFoundHandler(VenueNotFoundException ex, Model model) {
 		model.addAttribute("not_found_id", ex.getId());
 		return "venues/not_found";
+	}
+
+	@GetMapping("/{id}")
+	public String getVenue(@PathVariable("id") long id, Model model) {
+		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
+		model.addAttribute("venue", venue);
+		model.addAttribute("events", new ArrayList<Event>());
+		return "venues/details";
 	}
 
 	@GetMapping
@@ -57,6 +65,31 @@ public class VenuesController {
 		Iterable<Venue> listSearchVenues = venueService.listAll(keyword);
 		model.addAttribute("venues", listSearchVenues);
 		return "venues/index";
+	}
+
+	@GetMapping("/new")
+	public String newVenue(Model model) {
+		if (!model.containsAttribute("venue")) {
+			model.addAttribute("venue", new Venue());
+		}
+
+		return "venues/new";
+	}
+
+	@PostMapping("/new")
+	public String createEvent(@Valid @ModelAttribute Venue venue, BindingResult errors,
+			Model model, RedirectAttributes redirectAttrs) {
+
+		if (errors.hasErrors()) {
+			System.out.println(errors);
+			model.addAttribute("venue", venue);
+			return "venues/new";
+		}
+
+		venueService.save(venue);
+		redirectAttrs.addFlashAttribute("ok_message", "New venue added.");
+
+		return "redirect:/events";
 	}
 
 }
