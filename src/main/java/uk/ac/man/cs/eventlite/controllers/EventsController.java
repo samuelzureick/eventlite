@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ public class EventsController {
 	}
 	
 	@PostMapping("/update")
-	public String updateEvent(@ModelAttribute Event event, BindingResult errors,
+	public String updateEvent(@Valid @ModelAttribute Event event, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors()) {
@@ -88,10 +89,11 @@ public class EventsController {
 	}
 
 	@PostMapping("/new")
-	public String createEvent(@ModelAttribute Event event, BindingResult errors,
+	public String createEvent(@Valid @ModelAttribute Event event, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors()) {
+			System.out.println(errors);
 			model.addAttribute("event", event);
 			model.addAttribute("venues", venueService.findAll());
 			return "events/new";

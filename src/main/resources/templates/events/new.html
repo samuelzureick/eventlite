@@ -12,10 +12,10 @@
 
     <form action="#" th:action="@{/events/new}" th:object="${event}" method="post">
       <div class="form-group" th:classappend="${param.error}? has-error">
-        <label for="name">Event name:</label>
+        <label for="name">Event name: <span style="color:red" th:if="${#fields.hasErrors('name')}"><em>Invalid. Max 256 chars</em></span></label>
         <input class="form-control" type="text" th:field="*{name}" name="name" id="name" autofocus="autofocus" required/>
-        <label for="description">Description:</label>
-        <textarea class="form-control" th:field="*{description}" name="description" id="description" autofocus="autofocus" required></textarea>
+        <label for="description">Description: <span style="color:red" th:if="${#fields.hasErrors('description')}"><em>Invalid. Max 500 chars</em></span></label>
+        <textarea class="form-control" th:field="*{description}" name="description" id="description" autofocus="autofocus"></textarea>
         <label for="venue">Venue:</label>
       	<select class="form-control" name="venue" id="venue">
 	      <option th:each="v : ${venues}"
@@ -24,10 +24,10 @@
 	      		  th:selected="${v.id} == *{venue}">
 		  </option>
 		</select>
-        <label for="date">Date:</label>
+        <label for="date">Date: <span style="color:red" th:if="${#fields.hasErrors('date')}"><em>Invalid. Must be in future</em></span></label>
         <input class="form-control" type="date" th:type="date" th:field="*{date}" name="date" id="date" autofocus="autofocus" required/>
-        <label for="time">Time:</label>
-        <input class="form-control" type="time" th:type="time" th:field="*{time}" name="time" id="time" autofocus="autofocus" required/>
+        <label for="time">Time: </label>
+        <input class="form-control" type="time" th:type="time" th:field="*{time}" name="time" id="time" autofocus="autofocus"/>
       </div>
 
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
