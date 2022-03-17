@@ -25,4 +25,12 @@ public class VenueServiceImpl implements VenueService {
 	public void save(Venue venue) {
 		venueRepository.save(venue);
 	}
+
+	@Override
+	public Iterable<Venue> listAll(String keyword) {
+		if (keyword != null) {
+			return venueRepository.search(keyword);
+		}
+		return venueRepository.findAll();
+	}
 }
