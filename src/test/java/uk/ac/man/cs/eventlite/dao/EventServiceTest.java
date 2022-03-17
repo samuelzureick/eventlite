@@ -57,19 +57,20 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	
 	@Test
 	public void saveEventTest() {
-		eventService.save(this.event);
+		eventService.save(event);
 		assertEquals(eventService.count(), 4);
-		Event testEvent = eventService.findById(this.event.getId()).get();
-		assertEquals(testEvent.getName(), this.event.getName());
-		assertEquals(testEvent.getVenue(), this.event.getVenue());
-		assertEquals(testEvent.getDate(), this.event.getDate());
-		assertEquals(testEvent.getTime(), this.event.getTime());
+		Event testEvent = eventService.findById(event.getId()).get();
+		assertEquals(testEvent.getName(), event.getName());
+		assertEquals(testEvent.getVenue(), event.getVenue());
+		assertEquals(testEvent.getDate(), event.getDate());
+		assertEquals(testEvent.getTime(), event.getTime());
 		return;		
 	}
 	
 //	@Test
 //	public void deleteEventTest() {
-//		eventService.deleteById(this.event.getId());
+//		assertEquals(4, event.getId());
+//		eventService.deleteById(4);
 //		assertFalse(eventService.findById(event.getId()).isPresent());
 //		return;
 //	}
