@@ -41,7 +41,6 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
         venue.setName("Temporary Venue");
         venue.setCapacity(1250);
         venueService.save(venue);
-        event.setId(4);
         event.setName("Temporary Event");
         event.setVenue(venue);
         event.setTime(LocalTime.now());
@@ -67,11 +66,12 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		return;		
 	}
 	
-//	@Test
-//	public void deleteEventTest() {
-//		assertEquals(4, event.getId());
-//		eventService.deleteById(4);
-//		assertFalse(eventService.findById(event.getId()).isPresent());
-//		return;
-//	}
+	@Test
+	public void deleteEventTest() {
+		eventService.save(event);
+		eventService.deleteById(event.getId());
+		assertFalse(eventService.findById(event.getId()).isPresent());
+		return;
+	}
+	
 }
