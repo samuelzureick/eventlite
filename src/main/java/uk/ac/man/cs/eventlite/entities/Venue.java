@@ -31,7 +31,7 @@ public class Venue {
 	
 	@NotEmpty(message = "Address cannot be empty.")
 	@Size(max = 300, message = "The address must have 300 characters or less.")
-//	@Pattern(regexp="(Street|Avenue|Road)\\s[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$")
+	@Pattern(regexp=".*(Street|Avenue|Road|Rd|St|Ave)\\s[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$")
 	@Column
 	private String address;
 
