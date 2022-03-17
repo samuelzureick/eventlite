@@ -1,6 +1,9 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,8 @@ public class VenueServiceImpl implements VenueService {
 
 	@Override
 	public Iterable<Venue> findAll() {
-		return venueRepository.findAll();
+		Iterable<Venue> venues = venueRepository.findAll();
+		return orderByName(venues);
 	}
 
 	@Override
@@ -30,14 +34,28 @@ public class VenueServiceImpl implements VenueService {
 
 	@Override
 	public Iterable<Venue> listAll(String keyword) {
+		Iterable<Venue> venues;
 		if (keyword != null) {
-			return venueRepository.search(keyword);
+			venues = venueRepository.search(keyword);
+		} else {
+			venues = venueRepository.findAll();
 		}
-		return venueRepository.findAll();
+		return orderByName(venues);
 	}
 
 	@Override
 	public Optional<Venue> findById(long id) {
 		return venueRepository.findById(id);
+	}
+
+	@Override
+	public Iterable<Venue> orderByName(Iterable<Venue> venues) {
+		//Convert to List
+		List<Venue> list = StreamSupport
+				  .stream(venues.spliterator(), false)
+				  .collect(Collectors.toList());
+		//Sort List
+		list.sort((a, b) -> (a.getName().compareTo(b.getName())));
+		return list;
 	}
 }

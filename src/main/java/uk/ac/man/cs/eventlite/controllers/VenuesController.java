@@ -1,7 +1,6 @@
 package uk.ac.man.cs.eventlite.controllers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.validation.Valid;
 

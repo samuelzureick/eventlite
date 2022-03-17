@@ -15,4 +15,6 @@ public interface VenueService {
 	public Iterable<Venue> listAll(String keyword);
 	
 	public Optional<Venue> findById(long id);
+
+	public Iterable<Venue> orderByName(Iterable<Venue> venues);
 }

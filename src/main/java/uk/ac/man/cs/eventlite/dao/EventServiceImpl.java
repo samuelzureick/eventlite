@@ -26,7 +26,8 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Iterable<Event> findAll() {
-		return findAllByOrderByDateTime(); 
+		Iterable<Event> events = eventRepository.findAll();
+		return orderByDateTime(events); 
 	}
 
 	@Override
@@ -40,8 +41,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Iterable<Event> findAllByOrderByDateTime(){
-		Iterable<Event> events = eventRepository.findAll();
+	public Iterable<Event> orderByDateTime(Iterable<Event> events) {
 		//Convert to List
 		List<Event> list = StreamSupport
 				  .stream(events.spliterator(), false)
@@ -56,10 +56,13 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Iterable<Event> listAll(String keyword){
+		Iterable<Event> events;
 		if (keyword != null) {
-			return eventRepository.search(keyword);
+			events = eventRepository.search(keyword);
+		} else {
+			events = eventRepository.findAll();
 		}
-		return eventRepository.findAll();
+		return orderByDateTime(events);
 	}
 
 	@Override
