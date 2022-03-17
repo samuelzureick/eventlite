@@ -26,7 +26,6 @@ import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
-import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 import uk.ac.man.cs.eventlite.exceptions.VenueNotFoundException;
 
 @Controller
@@ -49,9 +48,8 @@ public class VenuesController {
 	@GetMapping("/{id}")
 	public String getVenue(@PathVariable("id") long id, Model model) {
 		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
-
 		model.addAttribute("venue", venue);
-
+		model.addAttribute("events", new ArrayList<Event>());
 		return "venues/details";
 	}
 
@@ -68,18 +66,16 @@ public class VenuesController {
 		model.addAttribute("venues", listSearchVenues);
 		return "venues/index";
 	}
-	
+
 	@GetMapping("/new")
 	public String newVenue(Model model) {
 		if (!model.containsAttribute("venue")) {
 			model.addAttribute("venue", new Venue());
 		}
 
-//		model.addAttribute("venues", venueService.findAll());
-
 		return "venues/new";
 	}
-	
+
 	@PostMapping("/new")
 	public String createEvent(@Valid @ModelAttribute Venue venue, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
