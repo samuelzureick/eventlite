@@ -19,6 +19,8 @@ public class Venue {
 
 	@Column
 	private int capacity;
+	
+	private String address;
 
 	public Venue() {
 	}
@@ -46,4 +48,13 @@ public class Venue {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
+	
+	public String getAddress() {
+		return address;
+	}
+	
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 }

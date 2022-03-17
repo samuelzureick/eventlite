@@ -42,16 +42,19 @@ public class InitialDataLoader {
 	            venue.setId(1);
 	            venue.setName("Venue 1");
 	            venue.setCapacity(100);
+	            venue.setAddress("Kilburn Building University of Manchester, Oxford Rd, Manchester M13 9PL");
 	            venueService.save(venue);
 	            venue2 = new Venue();
 	            venue2.setId(2);
 	            venue2.setName("Venue 2");
 	            venue2.setCapacity(200);
+	            venue2.setAddress("Booth St E, Manchester M13");
 	            venueService.save(venue2);
 	            venue3 = new Venue();
 	            venue3.setId(3);
 	            venue3.setName("Venue 3");
 	            venue3.setCapacity(300);
+	            venue3.setAddress("Whitworth Building, Oxford Rd, Manchester M13 9PL");
 	            venueService.save(venue3);
 			}
             

@@ -32,8 +32,7 @@
       <tbody>
         <tr th:each="v : ${venues}">
           <td><a th:text="${v.name}" th:href="'/venues/'+${v.id}">My Venue</a></td>
-          <td>Venue Address</td>
-          <!-- <td th:text="${v.address}">Venue Address</td> -->
+          <td th:text="${v.address}">Venue Address</td>
           <td th:text="${v.capacity}">Venue capacity</td>
         </tr>
       </tbody>
