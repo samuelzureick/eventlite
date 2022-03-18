@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>New Venue</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Add a new venue</h1>
+
+    <form action="#" th:action="@{/venues/new}" th:object="${venue}" method="post">
+      <div class="form-group" th:classappend="${param.error}? has-error">
+        <label for="name">Venue name: <span style="color:red" th:if="${#fields.hasErrors('name')}"><em>Invalid. Max 256 chars</em></span></label>
+        <input class="form-control" type="text" th:field="*{name}" name="name" id="name" autofocus="autofocus" required/>
+        <label for="address">Address: <span style="color:red" th:if="${#fields.hasErrors('address')}"><em>Invalid. Max 300 chars. Must contain road name and postcode.</em></span></label>
+        <input class="form-control" type="text" th:field="*{address}" name="address" id="address" autofocus="autofocus" required/>
+        <label for="capacity">Capacity: <span style="color:red" th:if="${#fields.hasErrors('capacity')}"><em>Invalid. Must be at least 1</em></span></label>
+        <input class="form-control" type="number" th:field="*{capacity}" name="capacity" id="capcaity" autofocus="autofocus" required>
+      </div>
+      <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
+      <a class="btn btn-warning" role="button" href="/events"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+    </form>
+  </div>
+</body>
+</html>
