@@ -48,7 +48,7 @@ public class VenuesController {
 	public String getVenue(@PathVariable("id") long id, Model model) {
 		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
 		model.addAttribute("venue", venue);
-		model.addAttribute("events", new ArrayList<Event>());
+		model.addAttribute("events", eventService.splitEventFuture(eventService.findAll()));
 		return "venues/details";
 	}
 
