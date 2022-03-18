@@ -5,14 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
@@ -31,14 +32,15 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	
 	@Autowired
 	private VenueService venueService;
-	
+		
 	private Event event = new Event();
 	
-	@BeforeTestClass
+	private Venue venue = new Venue();
+	
+	@BeforeAll
 	public void initialise() {
-		Venue venue = new Venue();
-		venue.setId(4);
         venue.setName("Temporary Venue");
+        venue.setAddress("Stuart Road WA15 8QY");
         venue.setCapacity(1250);
         venueService.save(venue);
         event.setName("Temporary Event");
@@ -56,8 +58,9 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	
 	@Test
 	public void findByIdTest() {
-		Event eventUT = eventService.findById(1).orElse(null);
-		assertEquals(eventUT.getName(), "Event Alpha");
+		eventService.save(event);
+		Event eventUT = eventService.findById(event.getId()).get();
+		assertEquals(eventUT.getName(), "Temporary Event");
 		return;
 	}
 	
@@ -79,6 +82,18 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		eventService.deleteById(event.getId());
 		assertFalse(eventService.findById(event.getId()).isPresent());
 		return;
+	}
+	
+	@Test
+	public void finalAllEventTest() {
+		ArrayList<Event> eventsList = new ArrayList<Event>();
+		Iterable<Event> eventsUT = eventService.findAll();
+		for (Event e : eventsUT) {
+			eventsList.add(e);
+		}
+		assertEquals(eventsList.get(0).getName(), "Event Alpha");
+		assertEquals(eventsList.get(1).getName(), "Event Apple");
+		assertEquals(eventsList.get(2).getName(), "Event Alpha");
 	}
 	
 }
