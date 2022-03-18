@@ -1,8 +1,9 @@
 package uk.ac.man.cs.eventlite.controllers;
 
 import java.util.ArrayList;
-
-import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 @Controller
@@ -36,18 +38,20 @@ public class IndexController {
 
 		return "events/not_found";
 	}
-	
+
 	@GetMapping
-	public String getAllEvents(Model model) {
+	public String getAll(Model model) {
 		Iterable<Event> events = eventService.findAll();
-		ArrayList<Event> pastEvents = eventService.splitEventPast(events);
 		ArrayList<Event> futureEvents = eventService.splitEventFuture(events);
 
-		model.addAttribute("pastEvents", pastEvents);
-		model.addAttribute("futureEvents", futureEvents);
+		Iterable<Venue> venues = venueService.listVenuesOrderByEventsNumber();
+		List<Venue> topVenues = StreamSupport
+				  .stream(venues.spliterator(), false)
+				  .collect(Collectors.toList());
+	
+		model.addAttribute("events", futureEvents.subList(0, Math.min(3, futureEvents.size())));
+		model.addAttribute("venues", topVenues.subList(0, Math.min(3, topVenues.size())));
 
 		return "homepage/index";
 	}
-	
-	
 }
