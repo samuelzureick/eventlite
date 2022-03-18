@@ -38,11 +38,6 @@ public class InitialDataLoader {
 				log.info("Database already populated with venues. Skipping venue initialization.");
 			} else {
 	            // Build and save initial venues here.
-	            venue1 = new Venue();
-	            venue1.setName("Venue A");
-	            venue1.setAddress("23 Manchester Road E14 3BD");
-	            venue1.setCapacity(50);
-	            venueService.save(venue1);
 	            venue2 = new Venue();
 	            venue2.setName("Venue B");
 	            venue2.setAddress("Highland Road S43 2EZ");
@@ -53,6 +48,11 @@ public class InitialDataLoader {
 	            venue3.setAddress("19 Acacia Avenue WA15 8QY");
 	            venue3.setCapacity(10);
 	            venueService.save(venue3);
+	            venue1 = new Venue();
+	            venue1.setName("Venue A");
+	            venue1.setAddress("23 Manchester Road E14 3BD");
+	            venue1.setCapacity(50);
+	            venueService.save(venue1);
 			}
 
 			if (eventService.count() > 0) {
