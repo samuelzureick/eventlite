@@ -25,4 +25,9 @@ public class VenueServiceImpl implements VenueService {
 	public void save(Venue venue) {
 		venueRepository.save(venue);
 	}
+	
+	@Override
+	public Iterable<Venue> listVenuesOrderByEventsNumber() {
+		return venueRepository.searchVenuesOrderByEventsNumber();
+	}
 }
