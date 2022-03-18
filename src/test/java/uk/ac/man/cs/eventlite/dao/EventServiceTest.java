@@ -55,6 +55,13 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	}
 	
 	@Test
+	public void findByIdTest() {
+		Event eventUT = eventService.findById(1).orElse(null);
+		assertEquals(eventUT.getName(), "Event Alpha");
+		return;
+	}
+	
+	@Test
 	public void saveEventTest() {
 		eventService.save(event);
 		assertEquals(eventService.count(), 4);
