@@ -1,5 +1,7 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,12 @@ public class VenueServiceImpl implements VenueService {
 
 	@Override
 	public Iterable<Venue> findAll() {
-		return venueRepository.findAll();
+		return findAllByOrderByName();
+	}
+	
+	@Override
+	public Iterable<Venue> findAllByOrderByName() {
+		return venueRepository.findAllByOrderByName();
 	}
 
 	@Override
@@ -32,5 +39,10 @@ public class VenueServiceImpl implements VenueService {
 			return venueRepository.search(keyword);
 		}
 		return venueRepository.findAll();
+	}
+
+	@Override
+	public Optional<Venue> findById(long id) {
+		return venueRepository.findById(id);
 	}
 }

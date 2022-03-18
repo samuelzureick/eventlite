@@ -15,7 +15,7 @@ public interface EventService {
 
 	public Optional<Event> findById(long id);
 
-	public Iterable<Event> findAllByOrderByDateTime();
+	public Iterable<Event> orderByDateTime(Iterable<Event> events);
 
 	public Iterable<Event> listAll(String keyword);
 
