@@ -75,8 +75,8 @@ public class TestDataLoader {
 	            Event event3 = new Event();
 	            event3.setName("Event Apple");
 	            event3.setVenue(venue1);
-	            event3.setTime(LocalTime.now().plusHours(2));
-	            event3.setDate(LocalDate.now().plusDays(2));
+	            event3.setTime(LocalTime.now().plusHours(-2));
+	            event3.setDate(LocalDate.now().plusDays(-2));
 	            event3.setDescription("The last very cool event. Three your friends!");
 	            eventService.save(event3);
 			}
