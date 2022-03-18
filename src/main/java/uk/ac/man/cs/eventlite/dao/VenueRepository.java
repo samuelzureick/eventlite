@@ -13,4 +13,7 @@ public interface VenueRepository extends CrudRepository<Venue, Long> {
 	List<Venue> search(String keyword);
 	
 	List<Venue> findAllByOrderByName();
+
+	@Query("SELECT e.venue FROM Event e GROUP BY e.venue ORDER BY COUNT(*) DESC")
+	List<Venue> searchVenuesOrderByEventsNumber();
 }

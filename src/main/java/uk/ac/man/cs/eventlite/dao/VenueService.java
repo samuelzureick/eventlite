@@ -9,12 +9,14 @@ public interface VenueService {
 	public long count();
 
 	public Iterable<Venue> findAll();
-	
+
 	public Iterable<Venue> findAllByOrderByName();
-	
+
 	public void save(Venue venue);
-	
+
 	public Iterable<Venue> listAll(String keyword);
-	
+
 	public Optional<Venue> findById(long id);
+
+	public Iterable<Venue> listVenuesOrderByEventsNumber();
 }
