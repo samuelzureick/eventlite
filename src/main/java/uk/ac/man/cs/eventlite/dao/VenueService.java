@@ -14,6 +14,8 @@ public interface VenueService {
 	
 	public void save(Venue venue);
 	
+	public void deleteById(long id);
+	
 	public Iterable<Venue> listAll(String keyword);
 	
 	public Optional<Venue> findById(long id);

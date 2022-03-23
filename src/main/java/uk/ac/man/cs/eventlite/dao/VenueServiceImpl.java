@@ -45,4 +45,9 @@ public class VenueServiceImpl implements VenueService {
 	public Optional<Venue> findById(long id) {
 		return venueRepository.findById(id);
 	}
+	
+	@Override
+	public void deleteById(long id) {
+		venueRepository.deleteById(id);
+	}
 }

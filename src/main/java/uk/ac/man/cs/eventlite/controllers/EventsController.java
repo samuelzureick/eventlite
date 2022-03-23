@@ -23,7 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
+import uk.ac.man.cs.eventlite.exceptions.VenueNotFoundException;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -129,8 +131,18 @@ public class EventsController {
 
 	@DeleteMapping(value = "/{id}")
 	public String deleteEvent(@PathVariable("id") long id) {
-		eventService.deleteById(id);
+		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+		Venue venue = event.getVenue();
 
+		eventService.deleteById(id);
+		Iterable<Event> events = eventService.findAll();
+		boolean venueEmpty = true;
+		for (Event venue_event : events) {
+			if (venue_event.getVenue()==venue) {
+				venueEmpty=false;
+			}
+		}
+		venue.setEmpty(venueEmpty);
 		return "redirect:/events";
 	}
 }
