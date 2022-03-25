@@ -34,8 +34,8 @@ public class Venue {
 	@Pattern(regexp=".*(Street|Avenue|Road|Rd|St|Ave)\\s[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$")
 	@Column
 	private String address;
-	
-	public Boolean empty = true;
+
+	private boolean empty = true;
 
 	public Venue() {
 	}
@@ -63,16 +63,20 @@ public class Venue {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
-	
+
 	public String getAddress() {
 		return address;
 	}
-	
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	public void setEmpty(Boolean bool) {
-		empty = bool;
+
+	public boolean getEmpty() {
+		return empty;
+	}
+
+	public void setEmpty(boolean empty) {
+		this.empty = empty;
 	}
 }
