@@ -47,8 +47,18 @@ public class VenuesController {
 	@GetMapping("/{id}")
 	public String getVenue(@PathVariable("id") long id, Model model) {
 		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
+		ArrayList<Event> venue_events = new ArrayList<Event>();
+		Iterable<Event> events = eventService.findAll();
+		boolean venueEmpty = true;
+		for (Event event : events) {
+			if (event.getVenue()==venue) {
+				venueEmpty=false;
+			}
+		}
+		venue.setEmpty(venueEmpty);
 		model.addAttribute("venue", venue);
 		model.addAttribute("events", eventService.splitEventFuture(eventService.findAll()));
+		
 		return "venues/details";
 	}
 
@@ -88,7 +98,28 @@ public class VenuesController {
 		venueService.save(venue);
 		redirectAttrs.addFlashAttribute("ok_message", "New venue added.");
 
-		return "redirect:/events";
+		return "redirect:/venues";
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public String deleteVenue(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttrs) {
+		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
+		Iterable<Event> events = eventService.findAll();
+		boolean venueEmpty = true;
+		for (Event event : events) {
+			if (event.getVenue()==venue) {
+				venueEmpty=false;
+			}
+		}
+		if (venueEmpty) {
+			venueService.deleteById(id);
+			redirectAttrs.addFlashAttribute("ok_message", "Venue deleted.");
+			return "redirect:/venues";
+		}
+		//get venue events, check ==0
+		venue.setEmpty(false);
+		model.addAttribute("venue", venue);
+		return "venues/details";
 	}
 
 }

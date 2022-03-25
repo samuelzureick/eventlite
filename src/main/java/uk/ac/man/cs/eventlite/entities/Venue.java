@@ -35,6 +35,8 @@ public class Venue {
 	@Column
 	private String address;
 
+	private boolean empty = true;
+
 	public Venue() {
 	}
 
@@ -61,12 +63,20 @@ public class Venue {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
-	
+
 	public String getAddress() {
 		return address;
 	}
-	
+
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public boolean getEmpty() {
+		return empty;
+	}
+
+	public void setEmpty(boolean empty) {
+		this.empty = empty;
 	}
 }
