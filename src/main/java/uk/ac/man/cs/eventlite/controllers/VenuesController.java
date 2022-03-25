@@ -1,7 +1,5 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-import java.util.ArrayList;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,18 +45,17 @@ public class VenuesController {
 	@GetMapping("/{id}")
 	public String getVenue(@PathVariable("id") long id, Model model) {
 		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
-		ArrayList<Event> venue_events = new ArrayList<Event>();
 		Iterable<Event> events = eventService.findAll();
 		boolean venueEmpty = true;
 		for (Event event : events) {
-			if (event.getVenue()==venue) {
-				venueEmpty=false;
+			if (event.getVenue() == venue) {
+				venueEmpty = false;
 			}
 		}
 		venue.setEmpty(venueEmpty);
 		model.addAttribute("venue", venue);
 		model.addAttribute("events", eventService.splitEventFuture(eventService.findAll()));
-		
+
 		return "venues/details";
 	}
 
@@ -107,8 +104,8 @@ public class VenuesController {
 		Iterable<Event> events = eventService.findAll();
 		boolean venueEmpty = true;
 		for (Event event : events) {
-			if (event.getVenue()==venue) {
-				venueEmpty=false;
+			if (event.getVenue() == venue) {
+				venueEmpty = false;
 			}
 		}
 		if (venueEmpty) {

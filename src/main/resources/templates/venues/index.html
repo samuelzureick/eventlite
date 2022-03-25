@@ -38,8 +38,7 @@
       </tbody>
     </table>
 
-
-<div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
+    <div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
       <a class="btn btn-primary" role="button" href="/venues/new"><i class="fas fa-plus" aria-hidden="true"></i> Add a new venue</a>
     </div>
   </div>

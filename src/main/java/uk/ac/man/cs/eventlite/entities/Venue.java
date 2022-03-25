@@ -38,16 +38,16 @@ public class Venue {
 	@Min(value=1, message = "Capacity must be an integer greater or equal to 1.")
 	@Column
 	private int capacity;
-	
+
 	@NotEmpty(message = "Address cannot be empty.")
 	@Size(max = 300, message = "The address must have 300 characters or less.")
 	@Pattern(regexp=".*(Street|Avenue|Road|Rd|St|Ave)\\s[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$")
 	@Column
 	private String address;
-	
+
 	@Column
 	private double longitude;
-	
+
 	@Column
 	private double latitude;
 
@@ -79,21 +79,21 @@ public class Venue {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
-	
+
 	public double getLongitude() {
 		return longitude;
 	}
-	
+
 	public double getLatitude() {
 		return latitude;
 	}
-	
+
 	public void setLongitude(double lng) {
-		this.longitude= lng;
+		this.longitude = lng;
 	}
-	
+
 	public void setLatitude(double lat) {
-		this.latitude= lat;
+		this.latitude = lat;
 	}	
 
 	public String getAddress() {
@@ -102,11 +102,11 @@ public class Venue {
 
 	public void setAddress(String address) {
 		this.address = address;
-		
+
 		MapboxGeocoding client = MapboxGeocoding.builder()
 				.accessToken("pk.eyJ1IjoidGVhbWcxMCIsImEiOiJjbDE1ODIyZngwMG92M2pxczVkajF5YWQ4In0.JAscVbHj6h0TpFGWK4YU_A")
 				.query(address).build();
-		
+
 		class GeoResponse implements Callback<GeocodingResponse> {
 
 			public Point resultPoint;
@@ -114,23 +114,21 @@ public class Venue {
 			@Override
 			public void onResponse(Call <GeocodingResponse> call, Response <GeocodingResponse> response) {
 				List<CarmenFeature> results = response.body().features();
-				if (results.size() >0) {
+				if (results.size() > 0) {
 					resultPoint = results.get(0).center();
 				}
-				else {
-				}
+				else {}
 			}
-			
+
 			@Override
 			public void onFailure(Call<GeocodingResponse> call, Throwable t) {
 				System.out.println(t);			
 			}
 		}
-		
+
 		GeoResponse geoResponse = new GeoResponse();
-		
 		client.enqueueCall(geoResponse);
-		
+
 		try {
 			Thread.sleep(1000L);
 		} catch (InterruptedException e) {
