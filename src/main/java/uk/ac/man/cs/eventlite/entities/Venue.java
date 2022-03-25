@@ -95,8 +95,7 @@ public class Venue {
 	
 	public void setAddress(String address) {
 		this.address = address;
-		
-		MapboxGeocoding client = new MapboxGeocoding.builder()
+		MapboxGeocoding client = MapboxGeocoding.builder()
 				.accessToken("pk.eyJ1IjoidGVhbWcxMCIsImEiOiJjbDE1ODIyZngwMG92M2pxczVkajF5YWQ4In0.JAscVbHj6h0TpFGWK4YU_A")
 				.query(this.address).build();
 		
@@ -112,7 +111,7 @@ public class Venue {
 				else {
 //					Log.d(TAG, "onResponse: No Result Found");
 				}
-				}
+			}
 
 			@Override
 			public void onFailure(Call<GeocodingResponse> call, Throwable t) {
