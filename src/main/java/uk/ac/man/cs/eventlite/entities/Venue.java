@@ -14,14 +14,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.api.geocoding.v5.MapboxGeocoding.Builder;
 import com.mapbox.geojson.Point; 
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
-//import com.mapbox.api.geocoding.v5.GeocodingCriteria;
-
-//import com.sun.tools.javac.util.Log;
-//import com.mapbox.core.exceptions.ServicesException;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Callback;
@@ -50,9 +45,11 @@ public class Venue {
 	@Column
 	private String address;
 	
-	private float longitude;
+	@Column
+	private double longitude;
 	
-	private float latitude;
+	@Column
+	private double latitude;
 
 	public Venue() {
 	}
@@ -81,12 +78,23 @@ public class Venue {
 		this.capacity = capacity;
 	}
 	
-	public void setLongitude(float lon) {
-		this.longitude= lon;
+	public double getLongitude() {
+		System.out.println(longitude);
+		return longitude;
 	}
 	
-	public void setLatitude(float lat) {
+	public double getLatitude() {
+		return latitude;
+	}
+	
+	public void setLongitude(double lng) {
+		System.out.println(lng);
+		this.longitude= lng;
+	}
+	
+	public void setLatitude(double lat) {
 		this.latitude= lat;
+		System.out.println(this.latitude);
 	}	
 	
 	public String getAddress() {
@@ -95,37 +103,42 @@ public class Venue {
 	
 	public void setAddress(String address) {
 		this.address = address;
+		
 		MapboxGeocoding client = MapboxGeocoding.builder()
 				.accessToken("pk.eyJ1IjoidGVhbWcxMCIsImEiOiJjbDE1ODIyZngwMG92M2pxczVkajF5YWQ4In0.JAscVbHj6h0TpFGWK4YU_A")
-				.query(this.address).build();
+				.query(address).build();
 		
-		client.enqueueCall(new Callback<GeocodingResponse>()  {
+		class GeoResponse implements Callback<GeocodingResponse> {
+
+			public Point resultPoint;
+
 			@Override
 			public void onResponse(Call <GeocodingResponse> call, Response <GeocodingResponse> response) {
 				List<CarmenFeature> results = response.body().features();
-				
 				if (results.size() >0) {
-					Point firstResultPoint = results.get(0).center();
-//					Log.d(TAG, "onResponse: " + firstResultPoint.toString());
+					resultPoint = results.get(0).center();
 				}
 				else {
-//					Log.d(TAG, "onResponse: No Result Found");
 				}
 			}
-
+			
 			@Override
 			public void onFailure(Call<GeocodingResponse> call, Throwable t) {
 				System.out.println(t);			
 			}
-		});
-	}
-	
+		}
 		
-	public float getLongitude() {
-		return longitude;
-	}
-	
-	public float getLatitude() {
-		return latitude;
+		GeoResponse geoResponse = new GeoResponse();
+		
+		client.enqueueCall(geoResponse);
+		
+		try {
+			Thread.sleep(1000L);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setLongitude(geoResponse.resultPoint.longitude());
+		setLatitude(geoResponse.resultPoint.latitude());
 	}
 }
