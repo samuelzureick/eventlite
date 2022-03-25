@@ -1,11 +1,10 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.ArrayList;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import uk.ac.man.cs.eventlite.EventLite;
-import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
 
 @ExtendWith(SpringExtension.class)
@@ -28,26 +26,34 @@ public class VenueServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	@Autowired
 	private VenueService venueService;
 
-//	@BeforeAll
-//	public void initialise() {
-//		Venue venue = new Venue();
-//        venue.setName("Venue For Test");
-//        venue.setAddress("Stuart Road WA15 8QY");
-//        venue.setCapacity(1250);
-//        venueService.save(venue);
-//        Event event = new Event();
-//        event.setName("Event For Test");
-//        event.setVenue(venue);
-//        event.setTime(LocalTime.now());
-//        event.setDate(LocalDate.now());
-//        event.setDescription("This is just an event for test.");
-//	}
-	
 	@Test
 	public void countVenueTest() {
-		assertEquals(venueService.count(), 3);
-		return;
+		assertEquals(3, venueService.count());
 	}
 
-
+	@Test
+	public void findAllVenuesTest() {
+		ArrayList<Venue> venuesList = new ArrayList<Venue>();
+		Iterable<Venue> venuesUT = venueService.findAll();
+		for (Venue e : venuesUT) {
+			venuesList.add(e);
+		}
+		assertEquals(3, venuesList.size());
+		assertEquals("Venue A", venuesList.get(0).getName());
+		assertEquals("Venue B", venuesList.get(1).getName());
+		assertEquals("Venue C", venuesList.get(2).getName());
+	}
+	
+	@Test
+	public void saveVenueTest() {
+		Venue venue = new Venue();
+		venue.setName("Venue For Test");
+        venue.setAddress("Stuart Road WA15 8QY");
+        venue.setCapacity(1250);
+        venueService.save(venue);
+        assertEquals(4, venueService.count());
+        Venue venueUT = venueService.findById(7).orElse(null);
+        assertNotNull(venueUT);
+        assertEquals("Venue For Test", venueUT.getName());
+	}
 }
