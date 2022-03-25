@@ -81,7 +81,6 @@ public class Venue {
 	}
 	
 	public double getLongitude() {
-		System.out.println(longitude);
 		return longitude;
 	}
 	
@@ -90,13 +89,11 @@ public class Venue {
 	}
 	
 	public void setLongitude(double lng) {
-		System.out.println(lng);
 		this.longitude= lng;
 	}
 	
 	public void setLatitude(double lat) {
 		this.latitude= lat;
-		System.out.println(this.latitude);
 	}	
 
 	public String getAddress() {
@@ -137,7 +134,6 @@ public class Venue {
 		try {
 			Thread.sleep(1000L);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		setLongitude(geoResponse.resultPoint.longitude());
