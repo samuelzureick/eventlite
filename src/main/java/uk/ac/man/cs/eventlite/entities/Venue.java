@@ -1,6 +1,5 @@
 package uk.ac.man.cs.eventlite.entities;
 
-import java.awt.Point;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -16,11 +15,13 @@ import javax.validation.constraints.Size;
 
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding.Builder;
+import com.mapbox.geojson.Point; 
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
-import com.mapbox.geojson.Point;
-import com.sun.tools.javac.util.Log;
+//import com.mapbox.api.geocoding.v5.GeocodingCriteria;
 
+//import com.sun.tools.javac.util.Log;
+//import com.mapbox.core.exceptions.ServicesException;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Callback;
@@ -97,7 +98,7 @@ public class Venue {
 		
 		MapboxGeocoding client = new MapboxGeocoding.builder()
 				.accessToken("pk.eyJ1IjoidGVhbWcxMCIsImEiOiJjbDE1ODIyZngwMG92M2pxczVkajF5YWQ4In0.JAscVbHj6h0TpFGWK4YU_A")
-				.query(address).build();
+				.query(this.address).build();
 		
 		client.enqueueCall(new Callback<GeocodingResponse>()  {
 			@Override
@@ -105,16 +106,19 @@ public class Venue {
 				List<CarmenFeature> results = response.body().features();
 				
 				if (results.size() >0) {
-					com.mapbox.geojson.Point firstResultPoint = results.get(0).center();
-					Log.d(TAG, "onResponse: " + firstResultPoint.toString());
+					Point firstResultPoint = results.get(0).center();
+//					Log.d(TAG, "onResponse: " + firstResultPoint.toString());
 				}
 				else {
-					Log.d(TAG, "onResponse: No Result Found");
+//					Log.d(TAG, "onResponse: No Result Found");
 				}
 				}
 
+			@Override
+			public void onFailure(Call<GeocodingResponse> call, Throwable t) {
+				System.out.println(t);			
 			}
-		);}
+		});
 	}
 	
 		
