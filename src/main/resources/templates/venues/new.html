@@ -19,6 +19,7 @@
         <label for="capacity">Capacity: <span style="color:red" th:if="${#fields.hasErrors('capacity')}"><em>Invalid. Must be at least 1</em></span></label>
         <input class="form-control" type="number" th:field="*{capacity}" name="capacity" id="capcaity" autofocus="autofocus" required>
       </div>
+
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
       <a class="btn btn-warning" role="button" href="/events"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
     </form>

@@ -5,8 +5,9 @@ import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterService {
+
 	private Twitter twitter;
-	
+
 	public TwitterService() {
 		ConfigurationBuilder cb = new ConfigurationBuilder();
 		cb.setDebugEnabled(true)
@@ -17,7 +18,7 @@ public class TwitterService {
 		TwitterFactory tf = new TwitterFactory(cb.build());
 		twitter = tf.getInstance();
 	}
-	
+
 	public Twitter getTwitter() {
 		return twitter;
 	}
