@@ -76,17 +76,15 @@
 			zoom: 6 // starting zoom
 		});
     </script>
-    <div th:each="event : ${futureEvents}">
-      <script th:inline="javascript">
-      /*<![CDATA[*/
-          var longitude = /*[[${event.venue.longitude}]]*/ -2.242631;
-          var latitude = /*[[${event.venue.latitude}]]*/ 53.480759;
-          var marker = new mapboxgl.Marker()
-          .setLngLat([longitude, latitude])
-          .addTo(map);
-      /*]]>*/
-      </script>
-    </div>
+    <script th:inline="javascript" th:each="event : ${futureEvents}">
+    /*<![CDATA[*/
+    	var longitude = /*[[${event.venue.longitude}]]*/ -2.242631;
+    	var latitude = /*[[${event.venue.latitude}]]*/ 53.480759;
+    	var marker = new mapboxgl.Marker()
+    	.setLngLat([longitude, latitude])
+    	.addTo(map);
+    /*]]>*/
+    </script>
 
   </div>
 </body>
