@@ -50,6 +50,9 @@
         center: [longitude, latitude], // starting position [lng, lat]
         zoom: 12 // starting zoom
       });
+    	const marker = new mapboxgl.Marker()
+    	.setLngLat([longitude, latitude])
+    	.addTo(map);
     	/*]]>*/
     </script>
   </div>
