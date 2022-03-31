@@ -10,10 +10,10 @@ public class TwitterService {
 	public TwitterService() {
 		ConfigurationBuilder cb = new ConfigurationBuilder();
 		cb.setDebugEnabled(true)
-		.setOAuthConsumerKey("your consumer key")
-		.setOAuthConsumerSecret("your consumer secret")
-		.setOAuthAccessToken("your access token")
-		.setOAuthAccessTokenSecret("your access token secret");
+		.setOAuthConsumerKey("bde2hcqJ6w6YlTjKjqI7cZ3NB")
+		.setOAuthConsumerSecret("MGtMQm6F0nqjSXXWrRv4PVcZouwnd8uRG44i3A3hADILsOguvg")
+		.setOAuthAccessToken("1509554147321913347-jgdKYFkTjbY4laMEhiLPe8LcXCJ3qp")
+		.setOAuthAccessTokenSecret("vhj6VjQVLY4IeW3KnaS7wzgADTx3ptuQialkAq0Jhq2cZ");
 		TwitterFactory tf = new TwitterFactory(cb.build());
 		twitter = tf.getInstance();
 	}
