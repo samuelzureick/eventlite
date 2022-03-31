@@ -23,6 +23,7 @@ import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
+import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 import uk.ac.man.cs.eventlite.exceptions.VenueNotFoundException;
 
 @Controller
@@ -117,6 +118,31 @@ public class VenuesController {
 		venue.setEmpty(false);
 		model.addAttribute("venue", venue);
 		return "venues/details";
+	}
+	
+	@GetMapping("/update/{id}")
+	public String getVenueUpdate(@PathVariable("id") long id, Model model) {
+		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
+
+		model.addAttribute("venue", venue);
+		model.addAttribute("venues", venueService.findAll());
+		
+		return "venues/update";
+	}
+	
+	@PostMapping("/update")
+	public String updateEvent(@Valid @ModelAttribute Venue venue, BindingResult errors,
+			Model model, RedirectAttributes redirectAttrs) {
+
+		if (errors.hasErrors()) {
+			model.addAttribute("venue", venue);
+			return "redirect:/venues/update";
+		}
+
+		venueService.save(venue);
+		redirectAttrs.addFlashAttribute("ok_message", "Venue updated.");
+
+		return "redirect:/venues";
 	}
 
 }
