@@ -78,7 +78,21 @@
         center: [-2.242631, 53.480759], // starting position [lng, lat]
         zoom: 12 // starting zoom
       });
-    </script>
+      </script>
+    <div th:each="event : ${futureEvents}">
+		<script th:inline="javascript">
+	    /*<![CDATA[*/
+	    	var longitude = /*[[${event.venue.longitude}]]*/;
+	      	var latitude = /*[[${event.venue.latitude}]]*/;
+	      	
+	      	console.log(/*[[${event.name}]]*/);
+	      	var marker1 = new mapboxgl.Marker()
+	      	.setLngLat([longitude, latitude])
+	      	.addTo(map);
+	  	
+	/*]]>*/
+	    </script>
+    </div>
   </div>
 </body>
 </html>
