@@ -7,12 +7,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -22,8 +24,8 @@ import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = EventLite.class)
-@DirtiesContext
+@SpringBootTest(classes = EventLite.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 	
@@ -49,26 +51,21 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
         event.setDate(LocalDate.now());
         event.setDescription("This is just for a test");
 	}
-//	
-//	@AfterEach
-//	public void tearDown() {
-//		venueService.
-//	}
+	
+	@AfterEach
+	public void tearDown() {
+		venueService.deleteById(venue.getId());
+	}
 	
 	@Test
 	public void countEventTest() {
-		assertEquals(eventService.count(), 3);
+		assertEquals(3, eventService.count());
 		return;
 	}
 	
 	@Test
 	public void findByIdTest() {
 		eventService.save(event);
-		System.out.println("AAAAAAAAAAAAaa");
-		System.out.println(event.getId());
-		System.out.println(event.getName());
-		System.out.println(event.getDate());
-		System.out.println(event.getTime());
 		Event eventUT = eventService.findById(event.getId()).get();
 		assertEquals("Temporary Event", eventUT.getName());
 		return;
@@ -77,12 +74,12 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	@Test
 	public void saveEventTest() {
 		eventService.save(event);
-		assertEquals(eventService.count(), 4);
+		assertEquals(4, eventService.count());
 		Event testEvent = eventService.findById(event.getId()).get();
-		assertEquals(testEvent.getName(), event.getName());
-		assertEquals(testEvent.getVenue(), event.getVenue());
-		assertEquals(testEvent.getDate(), event.getDate());
-		assertEquals(testEvent.getTime(), event.getTime());
+		assertEquals(event.getName(), testEvent.getName());
+		assertEquals(event.getVenue(), testEvent.getVenue());
+		assertEquals(event.getDate(), testEvent.getDate());
+		assertEquals(event.getTime(), testEvent.getTime());
 		return;		
 	}
 	
@@ -100,10 +97,14 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		Iterable<Event> eventsUT = eventService.findAll();
 		for (Event e : eventsUT) {
 			eventsList.add(e);
+			System.out.println(e.getName());
 		}
-		assertEquals(eventsList.get(0).getName(), "Event Alpha");
-		assertEquals(eventsList.get(1).getName(), "Event Apple");
-		assertEquals(eventsList.get(2).getName(), "Event Alpha");
+		for (int i=0; i<10; i++) {
+			System.out.println("");
+		}
+		assertEquals("Event Apple", eventsList.get(0).getName());
+		assertEquals("Event Alpha", eventsList.get(1).getName());
+		assertEquals("Event Beta", eventsList.get(2).getName());
 	}
 	
 	
