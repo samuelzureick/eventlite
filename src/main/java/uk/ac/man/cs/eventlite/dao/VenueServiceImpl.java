@@ -45,4 +45,14 @@ public class VenueServiceImpl implements VenueService {
 	public Optional<Venue> findById(long id) {
 		return venueRepository.findById(id);
 	}
+
+	@Override
+	public Iterable<Venue> listVenuesOrderByEventsNumber() {
+		return venueRepository.searchVenuesOrderByEventsNumber();
+	}
+	
+	@Override
+	public void deleteById(long id) {
+		venueRepository.deleteById(id);
+	}
 }

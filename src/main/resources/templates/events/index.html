@@ -5,6 +5,8 @@
       layout:decorate="~{layouts/default}">
 <head>
   <title>All Events</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
 </head>
 <body>
   <div layout:fragment="content">
@@ -63,6 +65,27 @@
 	<div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
       <a class="btn btn-primary" role="button" href="/events/new"><i class="fas fa-plus" aria-hidden="true"></i> Add a new event</a>
     </div>
+
+    <div id="map" style="width:100%;height:50vw;margin:15px 0;"></div>
+    <script>
+		mapboxgl.accessToken = 'pk.eyJ1IjoidGVhbWcxMCIsImEiOiJjbDE1ODIyZngwMG92M2pxczVkajF5YWQ4In0.JAscVbHj6h0TpFGWK4YU_A';
+		const map = new mapboxgl.Map({
+			container: 'map', // container ID
+			style: 'mapbox://styles/mapbox/streets-v11', // style URL
+			center: [-2.242631, 53.480759], // starting position [lng, lat]
+			zoom: 6 // starting zoom
+		});
+    </script>
+    <script th:inline="javascript" th:each="event : ${futureEvents}">
+    /*<![CDATA[*/
+    	var longitude = /*[[${event.venue.longitude}]]*/ -2.242631;
+    	var latitude = /*[[${event.venue.latitude}]]*/ 53.480759;
+    	var marker = new mapboxgl.Marker()
+    	.setLngLat([longitude, latitude])
+    	.addTo(map);
+    /*]]>*/
+    </script>
+
   </div>
 </body>
 </html>

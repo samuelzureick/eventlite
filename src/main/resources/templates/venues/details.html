@@ -20,10 +20,12 @@
 
     <div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
       <a class="btn btn-primary" role="button" th:href="'/venues/update/'+${venue.id}"><i class="fas fa-pen" aria-hidden="true"></i> Update venue</a>
-      <form th:action="@{/venues/{id}(id=${venue.id})}" th:method="delete" style="display:inline-block;">
+      <form th:action="@{/venues/{id}(id=${venue.id})}" th:if="${venue.empty}" th:method="delete" style="display:inline-block;">
         <button type="submit" class="btn btn-danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
       </form>
     </div>
+    <!-- <label style="color:red" th:unless="${venue.empty}"><em>You cannot delete this venue as there is still an event attached.</em></label>
+	-->
 
     <h1>Events coming up...</h1>
     <table class="table table-striped table-hover">
@@ -42,6 +44,7 @@
         </tr>
       </tbody>
     </table>
+
   </div>
 </body>
 </html>
