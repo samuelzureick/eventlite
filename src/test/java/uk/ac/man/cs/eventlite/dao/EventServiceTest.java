@@ -2,6 +2,7 @@ package uk.ac.man.cs.eventlite.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -92,7 +93,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	}
 	
 	@Test
-	public void finalAllEventTest() {
+	public void findAllEventTest() {
 		ArrayList<Event> eventsList = new ArrayList<Event>();
 		Iterable<Event> eventsUT = eventService.findAll();
 		for (Event e : eventsUT) {
@@ -107,6 +108,29 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		assertEquals("Event Beta", eventsList.get(2).getName());
 	}
 	
-	
+	@Test
+	public void splitEventTest() {
+		Event futureEvent = new Event();
+		futureEvent.setName("Future Event");
+		futureEvent.setVenue(venue);
+		futureEvent.setTime(LocalTime.now());
+		futureEvent.setDate(LocalDate.now().plusDays(10));
+		futureEvent.setDescription("This event is in the future");
+		eventService.save(futureEvent);
+		Event pastEvent = new Event();
+		pastEvent.setName("Past Event");
+		pastEvent.setVenue(venue);
+		pastEvent.setTime(LocalTime.now());
+		pastEvent.setDate(LocalDate.now().minusDays(10));
+		pastEvent.setDescription("This event is in the past");
+		eventService.save(pastEvent);
+		Iterable<Event> allEvents = eventService.findAll();
+		ArrayList<Event> pastEvents = eventService.splitEventPast(allEvents);
+		ArrayList<Event> futureEvents = eventService.splitEventFuture(allEvents);
+		assertTrue(pastEvents.contains(pastEvent));
+		assertFalse(pastEvents.contains(futureEvent));
+		assertTrue(futureEvents.contains(futureEvent));
+		assertFalse(futureEvents.contains(pastEvent));
+	}
 	
 }
