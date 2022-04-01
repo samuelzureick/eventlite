@@ -31,21 +31,20 @@ public class Event {
 	@Future
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	
 	@Column()
 	private LocalDate date;
 
-	@NotEmpty(message = "Time cannot be empty")
+	@NotNull
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column()
 	private LocalTime time;
-	
+
 	@NotEmpty(message = "Name cannot be empty.")
 	@Size(max = 256, message = "The name must have 256 characters or less.")
 	@Column()
 	private String name;
-	
+
 	@Size(max = 500, message = "The description must have 500 characters or less.")
 	@Column()
 	private String description;
@@ -57,7 +56,7 @@ public class Event {
 
 	public Event() {
 	}
-	
+
 	public long getId() {
 		return id;
 	}
@@ -81,11 +80,11 @@ public class Event {
 	public void setTime(LocalTime time) {
 		this.time = time;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -106,6 +105,5 @@ public class Event {
 		this.venue = venue;
 		venue.setEmpty(false);
 	}
-	
-	
+
 }
