@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	
 	private Venue venue = new Venue();
 	
-	@BeforeAll
+	@BeforeEach
 	public void initialise() {
         venue.setName("Temporary Venue");
         venue.setAddress("Stuart Road WA15 8QY");
@@ -49,6 +49,11 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
         event.setDate(LocalDate.now());
         event.setDescription("This is just for a test");
 	}
+//	
+//	@AfterEach
+//	public void tearDown() {
+//		venueService.
+//	}
 	
 	@Test
 	public void countEventTest() {
@@ -59,8 +64,13 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	@Test
 	public void findByIdTest() {
 		eventService.save(event);
+		System.out.println("AAAAAAAAAAAAaa");
+		System.out.println(event.getId());
+		System.out.println(event.getName());
+		System.out.println(event.getDate());
+		System.out.println(event.getTime());
 		Event eventUT = eventService.findById(event.getId()).get();
-		assertEquals(eventUT.getName(), "Temporary Event");
+		assertEquals("Temporary Event", eventUT.getName());
 		return;
 	}
 	
@@ -95,5 +105,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		assertEquals(eventsList.get(1).getName(), "Event Apple");
 		assertEquals(eventsList.get(2).getName(), "Event Alpha");
 	}
+	
+	
 	
 }
