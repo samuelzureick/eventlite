@@ -29,8 +29,8 @@
 		</select>
         <label for="date">Date: <span style="color:red" th:if="${#fields.hasErrors('date')}"><em>Invalid. Must be in future</em></span></label>
         <input class="form-control" type="date" th:type="date" th:field="*{date}" name="date" id="date" autofocus="autofocus" required/>
-        <label for="time">Time: </label>
-        <input class="form-control" type="time" th:type="time" th:field="*{time}" name="time" id="time" autofocus="autofocus"/>
+        <label for="time">Time: <span style="color:red" th:if="${#fields.hasErrors('time')}"><em>Invalid. Cannot be empty</em></span></label>
+        <input class="form-control" type="time" th:type="time" th:field="*{time}" name="time" id="time" autofocus="autofocus" required/>
       </div>
 
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>

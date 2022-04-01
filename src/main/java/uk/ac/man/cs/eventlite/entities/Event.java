@@ -35,6 +35,7 @@ public class Event {
 	@Column()
 	private LocalDate date;
 
+	@NotEmpty(message = "Time cannot be empty")
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column()
