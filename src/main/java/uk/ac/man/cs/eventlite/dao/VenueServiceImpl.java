@@ -22,7 +22,7 @@ public class VenueServiceImpl implements VenueService {
 	public Iterable<Venue> findAll() {
 		return findAllByOrderByName();
 	}
-	
+
 	@Override
 	public Iterable<Venue> findAllByOrderByName() {
 		return venueRepository.findAllByOrderByName();
@@ -50,7 +50,7 @@ public class VenueServiceImpl implements VenueService {
 	public Iterable<Venue> listVenuesOrderByEventsNumber() {
 		return venueRepository.searchVenuesOrderByEventsNumber();
 	}
-	
+
 	@Override
 	public void deleteById(long id) {
 		venueRepository.deleteById(id);

@@ -2,9 +2,11 @@ package uk.ac.man.cs.eventlite.dao;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,15 @@ public class VenueServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 	@Autowired
 	private VenueService venueService;
 
+	private Venue venue = new Venue();
+
+	@BeforeEach
+	public void initialise() {
+        venue.setName("Temporary Venue");
+        venue.setAddress("Stuart Road WA15 8QY");
+        venue.setCapacity(1250);
+	}
+
 	@Test
 	public void countVenueTest() {
 		assertEquals(3, venueService.count());
@@ -44,17 +55,30 @@ public class VenueServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		assertEquals("Venue B", venuesList.get(1).getName());
 		assertEquals("Venue C", venuesList.get(2).getName());
 	}
-	
+
 	@Test
 	public void saveVenueTest() {
-		Venue venue = new Venue();
-		venue.setName("Venue For Test");
-        venue.setAddress("Stuart Road WA15 8QY");
-        venue.setCapacity(1250);
-        venueService.save(venue);
-        assertEquals(4, venueService.count());
-        Venue venueUT = venueService.findById(7).orElse(null);
-        assertNotNull(venueUT);
-        assertEquals("Venue For Test", venueUT.getName());
+		venueService.save(venue);
+		assertEquals(4, venueService.count());
+		Venue testVenue = venueService.findById(venue.getId()).orElse(null);
+		assertNotNull(testVenue);
+		assertEquals(venue.getName(), testVenue.getName());
+		assertEquals(venue.getAddress(), testVenue.getAddress());
+		assertEquals(venue.getCapacity(), testVenue.getCapacity());
+	}
+
+	@Test
+	public void deleteByIdTest() {
+		venueService.save(venue);
+		venueService.deleteById(venue.getId());
+		assertFalse(venueService.findById(venue.getId()).isPresent());
+	}
+
+	@Test
+	public void findByIdTest() {
+		venueService.save(venue);
+		Venue testVenue = venueService.findById(venue.getId()).orElse(null);
+		assertNotNull(testVenue);
+		assertEquals(venue.getName(), testVenue.getName());
 	}
 }
