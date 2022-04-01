@@ -5,7 +5,10 @@
       layout:decorate="~{layouts/default}">
 <head>
   <title>Event Detail</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
 </head>
+
 <body>
   <div layout:fragment="content">
     <h1>Event Detail</h1>
@@ -23,12 +26,31 @@
       <input class="form-control" type="text" th:value="${{event.time}}" readonly/>
     </div>
 
+    <div id="map" style="width:100%;height:50vw;margin:15px 0;"></div>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+		var longitude = /*[[${event.venue.longitude}]]*/ -2.242631;
+		var latitude = /*[[${event.venue.latitude}]]*/ 53.480759;
+		mapboxgl.accessToken = 'pk.eyJ1IjoidGVhbWcxMCIsImEiOiJjbDE1ODIyZngwMG92M2pxczVkajF5YWQ4In0.JAscVbHj6h0TpFGWK4YU_A';
+		const map = new mapboxgl.Map({
+			container: 'map', // container ID
+			style: 'mapbox://styles/mapbox/streets-v11', // style URL
+			center: [longitude, latitude], // starting position [lng, lat]
+			zoom: 13 // starting zoom
+		});
+		const marker = new mapboxgl.Marker()
+		.setLngLat([longitude, latitude])
+		.addTo(map);
+    /*]]>*/
+    </script>
+
     <div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
       <a class="btn btn-primary" role="button" th:href="'/events/update/'+${event.id}"><i class="fas fa-pen" aria-hidden="true"></i> Update event</a>
       <form th:action="@{/events/{id}(id=${event.id})}" th:method="delete" style="display:inline-block;">
         <button type="submit" class="btn btn-danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
       </form>
     </div>
+
   </div>
 </body>
 </html>

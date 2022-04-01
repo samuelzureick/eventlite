@@ -144,6 +144,20 @@
       <artifactId>reactor-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+  	</dependency>
+	<dependency>
+      <groupId>com.mapbox.mapboxsdk</groupId>
+      <artifactId>mapbox-sdk-services</artifactId>
+      <version>5.0.0</version>
+  	</dependency>
+  	<dependency>
+        <groupId>org.twitter4j</groupId>
+        <artifactId>twitter4j-core</artifactId>
+        <version>4.0.7</version>
+    </dependency>
   </dependencies>
 
   <build>
