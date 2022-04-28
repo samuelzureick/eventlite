@@ -51,17 +51,17 @@ public class VenuesControllerApi {
 				.body(String.format(NOT_FOUND_MSG, ex.getMessage(), ex.getId()));
 	}
 
+	@GetMapping
+	public CollectionModel<EntityModel<Venue>> getAllVenues() {
+		return venueAssembler.toCollectionModel(venueService.findAll())
+				.add(linkTo(methodOn(VenuesControllerApi.class).getAllVenues()).withSelfRel());
+	}
+
 	@GetMapping("/{id}")
 	public EntityModel<Venue> getVenue(@PathVariable("id") long id) {
 		Venue venue= venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
 
 		return venueAssembler.toModel(venue);
-	}
-
-	@GetMapping
-	public CollectionModel<EntityModel<Venue>> getAllVenues() {
-		return venueAssembler.toCollectionModel(venueService.findAll())
-				.add(linkTo(methodOn(VenuesControllerApi.class).getAllVenues()).withSelfRel());
 	}
 
 	@GetMapping("/{id}/events")
