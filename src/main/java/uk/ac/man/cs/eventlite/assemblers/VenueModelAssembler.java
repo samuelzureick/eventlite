@@ -16,7 +16,8 @@ public class VenueModelAssembler implements RepresentationModelAssembler<Venue, 
 	@Override
 	public EntityModel<Venue> toModel(Venue venue) {
 		return EntityModel.of(venue, linkTo(methodOn(VenuesControllerApi.class).getVenue(venue.getId())).withSelfRel(),
-				linkTo(methodOn(VenuesControllerApi.class).getAllVenues()).withRel("venues"));
+				linkTo(methodOn(VenuesControllerApi.class).getVenue(venue.getId())).withRel("venue"),
+				linkTo(methodOn(VenuesControllerApi.class).getRelatedEvents(venue.getId())).withRel("events"));
 	}
 
 }

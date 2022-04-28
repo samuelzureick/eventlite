@@ -83,7 +83,7 @@ public class VenuesController {
 	}
 
 	@PostMapping("/new")
-	public String createEvent(@Valid @ModelAttribute Venue venue, BindingResult errors,
+	public String createVenue(@Valid @ModelAttribute Venue venue, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors()) {
@@ -130,7 +130,7 @@ public class VenuesController {
 	}
 	
 	@PostMapping("/update")
-	public String updateEvent(@Valid @ModelAttribute Venue venue, BindingResult errors,
+	public String updateVenue(@Valid @ModelAttribute Venue venue, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors()) {
