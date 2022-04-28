@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import uk.ac.man.cs.eventlite.assemblers.EventModelAssembler;
+import uk.ac.man.cs.eventlite.assemblers.VenueModelAssembler;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 @RestController
@@ -33,10 +35,19 @@ public class EventsControllerApi {
 	@Autowired
 	private EventModelAssembler eventAssembler;
 
+	@Autowired
+	private VenueModelAssembler venueAssembler;
+
 	@ExceptionHandler(EventNotFoundException.class)
 	public ResponseEntity<?> eventNotFoundHandler(EventNotFoundException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
 				.body(String.format(NOT_FOUND_MSG, ex.getMessage(), ex.getId()));
+	}
+
+	@GetMapping
+	public CollectionModel<EntityModel<Event>> getAllEvents() {
+		return eventAssembler.toCollectionModel(eventService.findAll())
+				.add(linkTo(methodOn(EventsControllerApi.class).getAllEvents()).withSelfRel());
 	}
 
 	@GetMapping("/{id}")
@@ -46,9 +57,11 @@ public class EventsControllerApi {
 		return eventAssembler.toModel(event);
 	}
 
-	@GetMapping
-	public CollectionModel<EntityModel<Event>> getAllEvents() {
-		return eventAssembler.toCollectionModel(eventService.findAll())
-				.add(linkTo(methodOn(EventsControllerApi.class).getAllEvents()).withSelfRel());
+	@GetMapping("/{id}/venue")
+	public EntityModel<Venue> getEventVenue(@PathVariable("id") long id) {
+		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+
+		return venueAssembler.toModel(event.getVenue());
 	}
+
 }

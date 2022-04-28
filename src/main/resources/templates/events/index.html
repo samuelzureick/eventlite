@@ -73,7 +73,7 @@
       <tbody>
         <tr th:each="t : ${tweets}">
           <td th:text="${t.getCreatedAt()}">Tweet DateTime</td>
- 		  <td><a th:text="${t.text}" th:href="'https://twitter.com/i/web/status/'+${t.id}">Tweet Text</a></td>
+ 		  <td><a th:text="${t.text}" th:href="'https://twitter.com/i/web/status/'+${t.id}" target="_blank">Tweet Text</a></td>
         </tr>
       </tbody>
     </table>

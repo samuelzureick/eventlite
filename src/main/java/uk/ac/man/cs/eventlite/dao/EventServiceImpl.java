@@ -76,8 +76,8 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public ArrayList<Event> splitEventPast(Iterable<Event> events){
-		ArrayList<Event> pastEvents = new ArrayList<Event>();
+	public List<Event> splitEventPast(Iterable<Event> events){
+		List<Event> pastEvents = new ArrayList<Event>();
 		LocalDate today = LocalDate.now();
 		for (Event event : events) {
 			if (event.getDate().isBefore(today)) {
@@ -95,8 +95,8 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public ArrayList<Event> splitEventFuture(Iterable<Event> events){
-		ArrayList<Event> futureEvents = new ArrayList<Event>();
+	public List<Event> splitEventFuture(Iterable<Event> events){
+		List<Event> futureEvents = new ArrayList<Event>();
 		LocalDate today = LocalDate.now();
 		for (Event event : events) {
 			if (event.getDate().isEqual(today) || event.getDate().isAfter(today)) {

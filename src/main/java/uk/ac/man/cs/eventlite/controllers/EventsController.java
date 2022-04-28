@@ -1,7 +1,7 @@
 package uk.ac.man.cs.eventlite.controllers;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -116,8 +116,8 @@ public class EventsController {
 	@GetMapping
 	public String getAllEvents(Model model) {
 		Iterable<Event> events = eventService.findAll();
-		ArrayList<Event> pastEvents = eventService.splitEventPast(events);
-		ArrayList<Event> futureEvents = eventService.splitEventFuture(events);
+		List<Event> pastEvents = eventService.splitEventPast(events);
+		List<Event> futureEvents = eventService.splitEventFuture(events);
 		
 		try {
 			ResponseList<Status> tweets = twitter.getUserTimeline();
@@ -135,8 +135,8 @@ public class EventsController {
 	@RequestMapping("/search")
 	public String getSearchEvents(Model model, @RequestParam String keyword) {
 		Iterable<Event> listSearchEvents = eventService.listAll(keyword);
-		ArrayList<Event> pastEvents = eventService.splitEventPast(listSearchEvents);
-		ArrayList<Event> futureEvents = eventService.splitEventFuture(listSearchEvents);
+		List<Event> pastEvents = eventService.splitEventPast(listSearchEvents);
+		List<Event> futureEvents = eventService.splitEventFuture(listSearchEvents);
 		model.addAttribute("pastEvents", pastEvents);
 		model.addAttribute("futureEvents", futureEvents);
 		return "events/index";
@@ -151,12 +151,12 @@ public class EventsController {
 		Iterable<Event> events = eventService.findAll();
 		boolean venueEmpty = true;
 		for (Event venue_event : events) {
-			if (venue_event.getVenue()==venue) {
-				venueEmpty=false;
+			if (venue_event.getVenue() == venue) {
+				venueEmpty = false;
 			}
 		}
 		venue.setEmpty(venueEmpty);
 		return "redirect:/events";
 	}
-	
+
 }
