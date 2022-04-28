@@ -75,7 +75,8 @@
       </thead>
       <tbody>
         <tr th:each="t : ${tweets}">
-          
+          <td th:text="${t.getCreatedAt()}">Tweet DateTime</td>
+          <td th:text="${t.text}">Tweet Text</td>
         </tr>
       </tbody>
     </table>
