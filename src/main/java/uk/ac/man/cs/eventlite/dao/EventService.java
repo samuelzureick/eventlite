@@ -1,6 +1,6 @@
 package uk.ac.man.cs.eventlite.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import uk.ac.man.cs.eventlite.entities.Event;
@@ -23,7 +23,7 @@ public interface EventService {
 
 	public void updateEvent(Event event);
 
-	public ArrayList<Event> splitEventPast(Iterable<Event> events);
+	public List<Event> splitEventPast(Iterable<Event> events);
 
-	public ArrayList<Event> splitEventFuture(Iterable<Event> events);
+	public List<Event> splitEventFuture(Iterable<Event> events);
 }

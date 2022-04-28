@@ -73,8 +73,25 @@ public class VenuesControllerApi {
 				events.add(event);
 			}
 		}
+
 		return eventAssembler.toCollectionModel(events)
 				.add(linkTo(methodOn(VenuesControllerApi.class).getRelatedEvents(id)).withSelfRel());
+	}
+
+	@GetMapping("/{id}/next3events")
+	public CollectionModel<EntityModel<Event>> getNext3Events(@PathVariable("id") long id) {
+		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
+		List<Event> events = new ArrayList<Event>();
+		for (Event event : eventService.findAll()) {
+			if (event.getVenue() == venue) {
+				events.add(event);
+			}
+		}
+		events = eventService.splitEventFuture(events);
+		events = events.subList(0, Math.min(3, events.size()));
+
+		return eventAssembler.toCollectionModel(events)
+				.add(linkTo(methodOn(VenuesControllerApi.class).getNext3Events(id)).withSelfRel());
 	}
 
 }

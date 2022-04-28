@@ -1,6 +1,5 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -32,7 +31,7 @@ public class IndexController {
 	@GetMapping(produces = MediaType.TEXT_HTML_VALUE)
 	public String getAll(Model model) {
 		Iterable<Event> events = eventService.findAll();
-		ArrayList<Event> futureEvents = eventService.splitEventFuture(events);
+		List<Event> futureEvents = eventService.splitEventFuture(events);
 
 		Iterable<Venue> venues = venueService.listVenuesOrderByEventsNumber();
 		List<Venue> topVenues = StreamSupport

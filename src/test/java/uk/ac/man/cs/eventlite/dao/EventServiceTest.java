@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,7 +88,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 
 	@Test
 	public void findAllEventsTest() {
-		ArrayList<Event> eventsList = new ArrayList<Event>();
+		List<Event> eventsList = new ArrayList<Event>();
 		Iterable<Event> eventsUT = eventService.findAll();
 		for (Event e : eventsUT) {
 			eventsList.add(e);
@@ -114,8 +115,8 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		pastEvent.setDescription("This event is in the past");
 		eventService.save(pastEvent);
 		Iterable<Event> allEvents = eventService.findAll();
-		ArrayList<Event> pastEvents = eventService.splitEventPast(allEvents);
-		ArrayList<Event> futureEvents = eventService.splitEventFuture(allEvents);
+		List<Event> pastEvents = eventService.splitEventPast(allEvents);
+		List<Event> futureEvents = eventService.splitEventFuture(allEvents);
 		assertTrue(pastEvents.contains(pastEvent));
 		assertFalse(pastEvents.contains(futureEvent));
 		assertTrue(futureEvents.contains(futureEvent));
