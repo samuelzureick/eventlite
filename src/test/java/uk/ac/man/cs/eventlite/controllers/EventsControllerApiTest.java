@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -77,4 +78,49 @@ public class EventsControllerApiTest {
 				.andExpect(jsonPath("$.error", containsString("event 99"))).andExpect(jsonPath("$.id", equalTo(99)))
 				.andExpect(handler().methodName("getEvent"));
 	}
+
+	@Test
+	public void getEvent() throws Exception {
+		Event e = new Event();
+		e.setId(0);
+		e.setName("Event");
+		e.setDate(LocalDate.now());
+		e.setTime(LocalTime.now());
+		e.setVenue(new Venue());
+		when(eventService.findById(0)).thenReturn(Optional.of(e));
+
+		mvc.perform(get("/api/events/0").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(handler().methodName("getEvent"))
+				.andExpect(jsonPath("$.id", equalTo(0)))
+				.andExpect(jsonPath("$.name", equalTo("Event")))
+				.andExpect(jsonPath("$._links.self.href", endsWith("/api/events/0")))
+				.andExpect(jsonPath("$._links.event.href", endsWith("/api/events/0")))
+				.andExpect(jsonPath("$._links.venue.href", endsWith("/api/events/0/venue")));
+
+		verify(eventService).findById(0);
+	}
+
+	@Test
+	public void getEventVenue() throws Exception {
+		Venue v = new Venue();
+		v.setId(0);
+		v.setName("Venue");
+		v.setCapacity(1000);
+		v.setAddress("176 Oxford Rd, Manchester M13 9PL");
+		Event e = new Event();
+		e.setId(1);
+		e.setName("Event");
+		e.setDate(LocalDate.now());
+		e.setTime(LocalTime.now());
+		e.setVenue(v);
+		when(eventService.findById(1)).thenReturn(Optional.of(e));
+
+		mvc.perform(get("/api/events/1/venue").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(handler().methodName("getEventVenue"))
+				.andExpect(jsonPath("$.id", equalTo(0)))
+				.andExpect(jsonPath("$.name", equalTo("Venue")));
+
+		verify(eventService).findById(1);
+	}
+
 }

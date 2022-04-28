@@ -59,7 +59,7 @@ public class VenuesControllerApi {
 
 	@GetMapping("/{id}")
 	public EntityModel<Venue> getVenue(@PathVariable("id") long id) {
-		Venue venue= venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
+		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
 
 		return venueAssembler.toModel(venue);
 	}
