@@ -19,4 +19,5 @@ public class EventModelAssembler implements RepresentationModelAssembler<Event, 
 				linkTo(methodOn(EventsControllerApi.class).getEvent(event.getId())).withRel("event"),
 				linkTo(methodOn(EventsControllerApi.class).getEventVenue(event.getId())).withRel("venue"));
 	}
+
 }

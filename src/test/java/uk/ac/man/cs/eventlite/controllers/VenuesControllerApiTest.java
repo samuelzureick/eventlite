@@ -22,21 +22,26 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import uk.ac.man.cs.eventlite.assemblers.EventModelAssembler;
 import uk.ac.man.cs.eventlite.assemblers.VenueModelAssembler;
 import uk.ac.man.cs.eventlite.config.Security;
+import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Venue;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(VenuesControllerApi.class)
-@Import({ Security.class, VenueModelAssembler.class })
+@Import({ Security.class, VenueModelAssembler.class, EventModelAssembler.class })
 public class VenuesControllerApiTest {
-	
+
 	@Autowired
 	private MockMvc mvc;
 
 	@MockBean
 	private VenueService venueService;
+
+	@MockBean
+	private EventService eventService;
 
 	@Test
 	public void getIndexWhenNoVenues() throws Exception {

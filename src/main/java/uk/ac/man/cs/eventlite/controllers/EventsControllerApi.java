@@ -63,4 +63,5 @@ public class EventsControllerApi {
 
 		return venueAssembler.toModel(event.getVenue());
 	}
+
 }

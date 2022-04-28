@@ -30,18 +30,18 @@ import uk.ac.man.cs.eventlite.exceptions.VenueNotFoundException;
 @RestController
 @RequestMapping(value = "/api/venues", produces = { MediaType.APPLICATION_JSON_VALUE, MediaTypes.HAL_JSON_VALUE })
 public class VenuesControllerApi {
-	
+
 	private static final String NOT_FOUND_MSG = "{ \"error\": \"%s\", \"id\": %d }";
 
 	@Autowired
 	private VenueService venueService;
-	
+
 	@Autowired
 	private EventService eventService;
 
 	@Autowired
 	private VenueModelAssembler venueAssembler;
-	
+
 	@Autowired
 	private EventModelAssembler eventAssembler;
 
