@@ -37,7 +37,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr th:each="e : ${events}" th:if="${e.venue} == ${venue}">
+        <tr th:each="e : ${events}">
           <td><a th:text="${e.name}" th:href="'/events/'+${e.id}">My Event</a></td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>

@@ -151,8 +151,8 @@ public class EventsController {
 		Iterable<Event> events = eventService.findAll();
 		boolean venueEmpty = true;
 		for (Event venue_event : events) {
-			if (venue_event.getVenue()==venue) {
-				venueEmpty=false;
+			if (venue_event.getVenue() == venue) {
+				venueEmpty = false;
 			}
 		}
 		venue.setEmpty(venueEmpty);
