@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import twitter4j.ResponseList;
+import twitter4j.Status;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.TwitterService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
@@ -111,11 +114,19 @@ public class EventsController {
 	}
 
 	@GetMapping
-	public String getAllEvents(Model model) {
+	public String getAllData(Model model) {
 		Iterable<Event> events = eventService.findAll();
 		ArrayList<Event> pastEvents = eventService.splitEventPast(events);
 		ArrayList<Event> futureEvents = eventService.splitEventFuture(events);
-
+		
+		try {
+			ResponseList<Status> tweets = twitter.getUserTimeline();
+			model.addAttribute("tweets", tweets.subList(0, Math.min(5, tweets.size())));
+		} catch (TwitterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		model.addAttribute("pastEvents", pastEvents);
 		model.addAttribute("futureEvents", futureEvents);
 
@@ -148,4 +159,5 @@ public class EventsController {
 		venue.setEmpty(venueEmpty);
 		return "redirect:/events";
 	}
+	
 }
