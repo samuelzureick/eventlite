@@ -114,7 +114,7 @@ public class EventsController {
 	}
 
 	@GetMapping
-	public String getAllData(Model model) {
+	public String getAllEvents(Model model) {
 		Iterable<Event> events = eventService.findAll();
 		ArrayList<Event> pastEvents = eventService.splitEventPast(events);
 		ArrayList<Event> futureEvents = eventService.splitEventFuture(events);
@@ -123,7 +123,6 @@ public class EventsController {
 			ResponseList<Status> tweets = twitter.getUserTimeline();
 			model.addAttribute("tweets", tweets.subList(0, Math.min(5, tweets.size())));
 		} catch (TwitterException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
