@@ -31,6 +31,9 @@
     /*<![CDATA[*/
 		var longitude = /*[[${event.venue.longitude}]]*/ -2.242631;
 		var latitude = /*[[${event.venue.latitude}]]*/ 53.480759;
+		var eventName = /*[[${event.name}]]*/ 'Event';
+    	var eventTime = /*[[${event.time}]]*/ '12:00';
+    	var eventDate = /*[[${event.date}]]*/ '2022-01-01';
 		mapboxgl.accessToken = 'pk.eyJ1IjoidGVhbWcxMCIsImEiOiJjbDE1ODIyZngwMG92M2pxczVkajF5YWQ4In0.JAscVbHj6h0TpFGWK4YU_A';
 		const map = new mapboxgl.Map({
 			container: 'map', // container ID
@@ -40,6 +43,12 @@
 		});
 		const marker = new mapboxgl.Marker()
 		.setLngLat([longitude, latitude])
+		.setPopup(
+		    new mapboxgl.Popup({ offset: 25 }) // add popups
+		      .setHTML(
+		        `<div style="text-align:center"><h4>` + eventName + `</h4><p>Date: ` + eventDate + `<br>Starts at: ` + eventTime + `</p></div>`
+		      )
+		 )
 		.addTo(map);
     /*]]>*/
     </script>
