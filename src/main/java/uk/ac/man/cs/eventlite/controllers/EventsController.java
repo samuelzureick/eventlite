@@ -159,4 +159,13 @@ public class EventsController {
 		return "redirect:/events";
 	}
 
+
+	@PostMapping("/{id}/share")
+	public String shareEvent(@PathVariable("id") long id, @RequestParam String text, Model model) throws TwitterException {
+		try {
+		    twitter.updateStatus(text);
+		} catch (TwitterException e) {
+		}
+		return "redirect:/events/" + id;
+	}
 }
