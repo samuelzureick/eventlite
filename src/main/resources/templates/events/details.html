@@ -46,7 +46,9 @@
 		.setPopup(
 		    new mapboxgl.Popup({ offset: 25 }) // add popups
 		      .setHTML(
-		        `<div style="text-align:center"><h4>` + eventName + `</h4><p>Date: ` + eventDate + `<br>Starts at: ` + eventTime + `</p></div>`
+		        `<div style="text-align:center"><h4>` + eventName + `</h4>
+		        <p>Date: ` + eventDate + `
+		        <br>Starts at: ` + eventTime + `</p></div>`
 		      )
 		 )
 		.addTo(map);
