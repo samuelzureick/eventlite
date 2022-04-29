@@ -5,10 +5,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,8 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -124,7 +120,7 @@ public class EventsControllerTest {
 
 	}
 	
-	@Test  // Currently fails, so needs fixing
+	@Test
 	public void createNewEventSuccess() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		doNothing().when(eventService).save(any(Event.class));
@@ -134,10 +130,10 @@ public class EventsControllerTest {
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param("name", "event")
 				.param("description", "this is an test event")
-				.param("venue", String.valueOf(venue))
+				.param("venue.id", "1")
 				.param("date", "2022-06-10")
 				.param("time", "23:17")				
-				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
 				.andExpect(view().name("redirect:/events")).andExpect(model().hasNoErrors())
 				.andExpect(handler().methodName("createEvent"));
 
