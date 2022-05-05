@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.StringContains.containsString;
 
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +30,7 @@ public class VenuesControllerApiIntegrationTest extends AbstractTransactionalJUn
 	private int port;
 
 	private WebTestClient client;
-
+	
 	@BeforeEach
 	public void setup() {
 		client = WebTestClient.bindToServer().baseUrl("http://localhost:" + port + "/api").build();
@@ -48,4 +49,33 @@ public class VenuesControllerApiIntegrationTest extends AbstractTransactionalJUn
 				.expectHeader().contentType(MediaType.APPLICATION_JSON).expectBody().jsonPath("$.error")
 				.value(containsString("venue 99")).jsonPath("$.id").isEqualTo(99);
 	}
+	
+	@Test
+	public void getVenue() throws Exception{
+		client.get().uri("/venues/1").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk()
+				.expectHeader().contentType(MediaType.APPLICATION_JSON).expectBody()
+				.jsonPath("$._links.self.href").value(endsWith("/api/venues/1"))
+				.jsonPath("$._links.venue.href").value(endsWith("/api/venues/1"))
+				.jsonPath("$._links.events.href").value(endsWith("/api/venues/1/events"))
+				.jsonPath("$._links.next3events.href").value(endsWith("/api/venues/1/next3events"));
+		
+	}
+	
+	@Test
+	public void getRelatedEvents() throws Exception {
+		client.get().uri("/venues/3/events").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk().expectHeader()
+			.contentType(MediaType.APPLICATION_JSON).expectBody()
+			.jsonPath("$._links.self.href").value(endsWith("/api/venues/3/events"))
+			.jsonPath("$._embedded.events.length()").value(equalTo(2));
+			
+	}
+	
+	@Test
+	public void getNext3Events() throws Exception{
+		client.get().uri("/venues/3/next3events").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk().expectHeader()
+			.contentType(MediaType.APPLICATION_JSON).expectBody()
+			.jsonPath("$._links.self.href").value(endsWith("/api/venues/3/next3events"))
+			.jsonPath("$._embedded.events.length()").value(equalTo(1));
+	}
+	
 }
