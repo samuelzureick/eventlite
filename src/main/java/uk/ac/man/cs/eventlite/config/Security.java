@@ -31,7 +31,7 @@ public class Security extends WebSecurityConfigurerAdapter {
 			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**")};
 	private static final RequestMatcher[] organizer = {new AntPathRequestMatcher("/webjars/**", "GET"),
 			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**"),
-			new AntPathRequestMatcher("/**", "POST")
+			new AntPathRequestMatcher("/**", "POST"), new AntPathRequestMatcher("/**", "DELETE")
 			};//, new AntPathRequestMatcher("/**", "PUT")
 	
 

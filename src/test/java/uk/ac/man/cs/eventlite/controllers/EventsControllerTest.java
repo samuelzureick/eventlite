@@ -145,8 +145,8 @@ public class EventsControllerTest {
 	public void createNewEventSuccess() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		doNothing().when(eventService).save(any(Event.class));
-		//doNothing().when(event).setVenue(any(Venue.class));
-				
+		doNothing().when(event).setVenue(any(Venue.class));
+		
 		mvc.perform(post("/events/new").with(user("Sam").roles(Security.ORGANIZER_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param("name", "event")
@@ -161,30 +161,33 @@ public class EventsControllerTest {
 		verify(eventService).save(arg.capture());
 		assertEquals("event", arg.getValue().getName());
 	}
+
 	
-	@Test  // Does not work yet, to be completed
+	@Test 
 	public void deleteEventThatDoesNotExist() throws Exception {
 		doNothing().when(eventService).deleteById(any(Long.class));
-		mvc.perform(delete("/events/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
+		
+		mvc.perform(delete("/events/99").with(user("Sam").roles(Security.ORGANIZER_ROLE))
+		.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isNotFound())
 		.andExpect(view().name("events/not_found")).andExpect(handler().methodName("deleteEvent"));
+		
+		verify(eventService, never()).deleteById(25);
 	}
 	
-	@Test // Does not work yet, to be completed
-	// Currently gives Status <403> which is forbidden
+	@Test
 	public void deleteEventSuccess() throws Exception {
-		Event e = new Event();
-		e.setId(25);
-		e.setName("event");
-		e.setVenue(venue);
-		e.setTime(LocalTime.MIDNIGHT);
-		e.setDate(LocalDate.now());
-		eventService.save(e);
-		
-		doNothing().when(eventService).deleteById(any(Long.class));
-		
-		mvc.perform(delete("/events/25").with(user("Sam").roles(Security.ADMIN_ROLE))
-		.accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+		when(eventService.findById(25)).thenReturn(Optional.of(event));
+		when(eventService.findAll()).thenReturn(Collections.<Event>emptyList());
+		when(event.getVenue()).thenReturn(venue);
+		doNothing().when(eventService).deleteById(25);
+		doNothing().when(venue).setEmpty(true);
+	
+		mvc.perform(delete("/events/25").with(user("Sam").roles(Security.ORGANIZER_ROLE))
+		.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
 		.andExpect(view().name("redirect:/events")).andExpect(handler().methodName("deleteEvent"));
+		
+		verify(eventService).findById(25);
+		verify(eventService).deleteById(25);
 	}
 	
 	
