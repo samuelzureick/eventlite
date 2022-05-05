@@ -128,13 +128,13 @@ public class EventsControllerTest {
 	public void createNewEventSuccess() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		doNothing().when(eventService).save(any(Event.class));
-		doNothing().when(event).setVenue(any(Venue.class));
-		
+		//doNothing().when(event).setVenue(any(Venue.class));
+				
 		mvc.perform(post("/events/new").with(user("Sam").roles(Security.ORGANIZER_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param("name", "event")
 				.param("description", "this is an test event")
-				.param("venue", String.valueOf(venue))
+				.param("venue", "1L")
 				.param("date", "2022-06-10")
 				.param("time", "23:17")				
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
