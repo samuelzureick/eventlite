@@ -5,11 +5,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -17,8 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -110,21 +109,39 @@ public class EventsControllerTest {
 	}
 	
 	@Test
-	public void createNewEvenWithNoVenue() throws Exception {		
+	public void createNewEventWithNoVenue() throws Exception {
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		mvc.perform(post("/events/new").with(user("Sam").roles(Security.ORGANIZER_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param("name", "event")
 				.param("description", "this is an test event")
-				.param("venue", "")
+				.param("venue", "")  // No venue given to the event, violating our constraints
 				.param("date", "2022-06-10")
 				.param("time", "23:17")				
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
 				.andExpect(view().name("events/new")).andExpect(model().hasErrors())
 				.andExpect(handler().methodName("createEvent"));
 
+		verify(eventService, never()).save(arg.capture());
 	}
 	
-	@Test  // Currently fails, so needs fixing
+	@Test
+	public void createNewEventWithWrongAuthority() throws Exception {
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		
+		mvc.perform(post("/events/new").with(user("Sam").roles(Security.ATTENDEE_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "event")
+				.param("description", "this is an test event")
+				.param("venue.id", "1")
+				.param("date", "2022-06-10")
+				.param("time", "23:17")				
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isForbidden());
+
+		verify(eventService, never()).save(arg.capture());
+	}
+	
+	@Test
 	public void createNewEventSuccess() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		doNothing().when(eventService).save(any(Event.class));
@@ -134,16 +151,43 @@ public class EventsControllerTest {
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param("name", "event")
 				.param("description", "this is an test event")
-				.param("venue", "1L")
+				.param("venue.id", "1")
 				.param("date", "2022-06-10")
 				.param("time", "23:17")				
-				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
 				.andExpect(view().name("redirect:/events")).andExpect(model().hasNoErrors())
-				.andExpect(handler().methodName("createEvent"));
+				.andExpect(handler().methodName("createEvent")).andExpect(flash().attributeExists("ok_message"));
 
 		verify(eventService).save(arg.capture());
 		assertEquals("event", arg.getValue().getName());
 	}
+	
+	@Test  // Does not work yet, to be completed
+	public void deleteEventThatDoesNotExist() throws Exception {
+		doNothing().when(eventService).deleteById(any(Long.class));
+		mvc.perform(delete("/events/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
+		.andExpect(view().name("events/not_found")).andExpect(handler().methodName("deleteEvent"));
+	}
+	
+	@Test // Does not work yet, to be completed
+	// Currently gives Status <403> which is forbidden
+	public void deleteEventSuccess() throws Exception {
+		Event e = new Event();
+		e.setId(25);
+		e.setName("event");
+		e.setVenue(venue);
+		e.setTime(LocalTime.MIDNIGHT);
+		e.setDate(LocalDate.now());
+		eventService.save(e);
+		
+		doNothing().when(eventService).deleteById(any(Long.class));
+		
+		mvc.perform(delete("/events/25").with(user("Sam").roles(Security.ADMIN_ROLE))
+		.accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+		.andExpect(view().name("redirect:/events")).andExpect(handler().methodName("deleteEvent"));
+	}
+	
+	
 	
 	
 }
