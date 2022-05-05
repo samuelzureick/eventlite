@@ -109,6 +109,15 @@ public class EventsControllerTest {
 	}
 	
 	@Test
+	public void newEventPage() throws Exception {
+		mvc.perform(get("/events/new").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+		.andExpect(view().name("events/new")).andExpect(handler().methodName("newEvent"))
+		.andExpect(model().hasNoErrors());
+
+	}
+	
+	
+	@Test
 	public void createNewEventWithNoVenue() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		mvc.perform(post("/events/new").with(user("Sam").roles(Security.ORGANIZER_ROLE))
@@ -203,8 +212,6 @@ public class EventsControllerTest {
 		verify(eventService).findById(25);
 		verify(eventService).deleteById(25);
 	}
-	
-	
 	
 	
 }
