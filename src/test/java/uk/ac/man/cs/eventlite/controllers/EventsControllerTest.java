@@ -162,6 +162,20 @@ public class EventsControllerTest {
 		assertEquals("event", arg.getValue().getName());
 	}
 
+	@Test 
+	public void deleteEventWithWrongAuthority() throws Exception {
+		when(eventService.findById(25)).thenReturn(Optional.of(event));
+		when(eventService.findAll()).thenReturn(Collections.<Event>emptyList());
+		when(event.getVenue()).thenReturn(venue);
+		doNothing().when(eventService).deleteById(25);
+		doNothing().when(venue).setEmpty(true);
+	
+		mvc.perform(delete("/events/25").with(user("attendee").roles(Security.ATTENDEE_ROLE))
+		.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isForbidden());
+		
+		verify(eventService, never()).deleteById(25);
+	}
+	
 	
 	@Test 
 	public void deleteEventThatDoesNotExist() throws Exception {
