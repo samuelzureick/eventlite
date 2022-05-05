@@ -235,5 +235,56 @@ public class EventsControllerTest {
 		
 	}
 	
+	@Test
+	public void updateEventPage() throws Exception {
+		when(eventService.findById(25)).thenReturn(Optional.of(event));
+		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
+		
+		mvc.perform(get("/events/update/25").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+		.andExpect(view().name("events/update")).andExpect(handler().methodName("getEventUpdate"))
+		.andExpect(model().hasNoErrors());
+	}
+	
+	@Test
+	public void updateEventWithErrors() throws Exception {
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		
+		mvc.perform(post("/events/update").with(user("Sam").roles(Security.ORGANIZER_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "")  // Errors because we must state which event to update
+				.param("name", "event")
+				.param("description", "this is an test event")
+				.param("venue.id", "1")
+				.param("date", "2022-06-10")
+				.param("time", "23:17")				
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+				.andExpect(view().name("/events/update")).andExpect(model().hasErrors())
+				.andExpect(handler().methodName("updateEvent"));
+
+		verify(eventService, never()).save(arg.capture());
+	}
+	
+	@Test
+	public void updateEventSuccess() throws Exception {
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.findById(25)).thenReturn(Optional.of(event));
+		doNothing().when(eventService).save(any(Event.class));
+		doNothing().when(event).setVenue(any(Venue.class));
+		
+		mvc.perform(post("/events/update").with(user("Sam").roles(Security.ORGANIZER_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "25")
+				.param("name", "event")
+				.param("description", "this is an test event")
+				.param("venue.id", "25")
+				.param("date", "2022-06-10")
+				.param("time", "23:17")				
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+				.andExpect(view().name("/events/details")).andExpect(model().hasNoErrors())
+				.andExpect(handler().methodName("updateEvent"));
+
+		verify(eventService).save(arg.capture());
+	}
+	
 	
 }
