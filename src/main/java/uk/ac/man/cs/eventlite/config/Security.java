@@ -74,6 +74,6 @@ public class Security extends WebSecurityConfigurerAdapter {
 		UserDetails ruben = User.withUsername("Ruben").password(encoder.encode("Secret")).roles(ORGANIZER_ROLE).build();
 		UserDetails ryan = User.withUsername("Ryan").password(encoder.encode("software")).roles(ORGANIZER_ROLE).build();
 		UserDetails attendee = User.withUsername("attendee").password(encoder.encode("ROLE")).roles(ATTENDEE_ROLE).build();
-		return new InMemoryUserDetailsManager(rob, caroline, markel, mustafa, tom, sam, ruben, ryan);
+		return new InMemoryUserDetailsManager(rob, caroline, markel, mustafa, tom, sam, ruben, ryan, attendee);
 	}
 }
