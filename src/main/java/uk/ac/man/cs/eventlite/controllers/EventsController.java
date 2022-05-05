@@ -132,6 +132,7 @@ public class EventsController {
 		
 		model.addAttribute("pastEvents", pastEvents);
 		model.addAttribute("futureEvents", futureEvents);
+		model.addAttribute("venues", venueService.findAll());
 
 		return "events/index";
 	}
