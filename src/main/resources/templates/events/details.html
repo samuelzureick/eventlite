@@ -27,7 +27,7 @@
     </div>
     
     <form action="#" th:action="'/events/'+${event.id}+'/share'" method="post">
-        <label for="text">Share the event!</label>
+        <label for="text">Share the event! <span style="color:green" th:if="${tweet != null}"><em>Success! You tweeted: </em></span><span style="color:green" th:text="${tweet}" th:if="${tweet != null}"></span></label>
         <input class="form-control" type="text" th:value="${{event.name}}" name="text" id="text" autofocus="autofocus"/>
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i>Send Tweet</button>
     </form>
