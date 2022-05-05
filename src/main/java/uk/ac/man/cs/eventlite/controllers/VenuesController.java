@@ -120,10 +120,8 @@ public class VenuesController {
 			redirectAttrs.addFlashAttribute("ok_message", "Venue deleted.");
 			return "redirect:/venues";
 		}
-		//get venue events, check ==0
-		venue.setEmpty(false);
-		model.addAttribute("venue", venue);
-		return "venues/details";
+
+		return "redirect:/venues/" + venue.getId();
 	}
 	
 	@GetMapping("/update/{id}")
@@ -132,7 +130,7 @@ public class VenuesController {
 
 		model.addAttribute("venue", venue);
 		model.addAttribute("venues", venueService.findAll());
-		
+
 		return "venues/update";
 	}
 	
@@ -142,13 +140,14 @@ public class VenuesController {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("venue", venue);
-			return "redirect:/venues/update";
+			model.addAttribute("venues", venueService.findAll());
+			return "/venues/update";
 		}
 
 		venueService.save(venue);
-		redirectAttrs.addFlashAttribute("ok_message", "Venue updated.");
 
-		return "redirect:/venues";
+		redirectAttrs.addFlashAttribute("ok_message", "Venue updated.");
+		return "redirect:/venues/" + venue.getId();
 	}
 
 }
