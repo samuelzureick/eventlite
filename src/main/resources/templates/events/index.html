@@ -91,15 +91,46 @@
 			center: [-2.242631, 53.480759], // starting position [lng, lat]
 			zoom: 6 // starting zoom
 		});
+		var venueNames = [];
+		var venueLongs = [];
+		var venueLats = [];
+		var eventNames = [];
+		var eventTimes = [];
+		var eventDates = [];
+		var eventVenues = [];
+    </script>
+<!--     Loops to store the values we need to display -->
+    <script th:inline="javascript" th:each="venue : ${venues}">
+    	venueNames.push(/*[[${venue.name}]]*/ 'default');
+    	venueLongs.push(/*[[${venue.longitude}]]*/ -2.242631);
+    	venueLats.push(/*[[${venue.latitude}]]*/ 53.480759);
     </script>
     <script th:inline="javascript" th:each="event : ${futureEvents}">
-    /*<![CDATA[*/
-    	var longitude = /*[[${event.venue.longitude}]]*/ -2.242631;
-    	var latitude = /*[[${event.venue.latitude}]]*/ 53.480759;
-    	var marker = new mapboxgl.Marker()
-    	.setLngLat([longitude, latitude])
-    	.addTo(map);
-    /*]]>*/
+    	eventNames.push(/*[[${event.name}]]*/ 'default');
+    	eventTimes.push(/*[[${event.time}]]*/ '12:00');
+    	eventDates.push(/*[[${event.date}]]*/ '2022-01-01');
+    	eventVenues.push(/*[[${event.venue.name}]]*/ 'default');
+    </script>
+<!--     This loops through the venues, and creates a HTML string to show the events which are at the venues -->
+    <script th:inline="javascript">
+    	for(let i=0; i<venueNames.length; i++){
+    		var htmlString = '<div style="text-align:center">';
+    		for(let j=0; j<eventNames.length; j++){
+    			if (eventVenues[j] == venueNames[i]){
+    				htmlString = htmlString + '<h4>' + eventNames[j] + '</h4><p>Date: ' + eventDates[j] + '<br>Starts at: ' + eventTimes[j] + '</p>';
+    			}
+    		}
+    		htmlString = htmlString + '</div>';
+    		if (htmlString != '<div style="text-align:center">' + '</div>'){ // Don't display venues with no events
+	    		var marker = new mapboxgl.Marker()
+	        	.setLngLat([venueLongs[i], venueLats[i]])
+	        	.setPopup(
+	    		    new mapboxgl.Popup({ offset: 25 }) // add popups
+	    		      .setHTML(htmlString)
+	    		 )
+	        	.addTo(map);
+    		}
+    	}
     </script>
 
   </div>
