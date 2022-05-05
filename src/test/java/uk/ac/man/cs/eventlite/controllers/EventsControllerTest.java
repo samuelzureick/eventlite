@@ -236,7 +236,7 @@ public class EventsControllerTest {
 	}
 	
 	@Test
-	public void updateEventPage() throws Exception {
+	public void updateEventPage() throws Exception {   // Errors currently, needs fixing
 		when(eventService.findById(25)).thenReturn(Optional.of(event));
 		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
 		
