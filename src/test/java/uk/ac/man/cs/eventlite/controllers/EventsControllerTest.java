@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -111,13 +110,12 @@ public class EventsControllerTest {
 	}
 	
 	@Test
-	public void newEventPage() throws Exception {
+	public void getNewEventPage() throws Exception {
 		mvc.perform(get("/events/new").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 		.andExpect(view().name("events/new")).andExpect(handler().methodName("newEvent"))
 		.andExpect(model().hasNoErrors());
-
 	}
-	
+
 	@Test
 	public void createNewEventWithNoVenue() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
@@ -216,9 +214,9 @@ public class EventsControllerTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void searchEvent() throws Exception {
-		when(eventService.listAll("search_event")).thenReturn(new ArrayList<Event>());
-		when(eventService.splitEventPast(any(List.class))).thenReturn(new ArrayList<Event>());
-		when(eventService.splitEventFuture(any(List.class))).thenReturn(new ArrayList<Event>());
+		when(eventService.listAll("search_event")).thenReturn(Collections.<Event>emptyList());
+		when(eventService.splitEventPast(any(List.class))).thenReturn(Collections.<Event>emptyList());
+		when(eventService.splitEventFuture(any(List.class))).thenReturn(Collections.<Event>emptyList());
 		
 		mvc.perform(get("/events/search")
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -250,7 +248,7 @@ public class EventsControllerTest {
 	@Test
 	public void updateEventWithErrors() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
-		when(eventService.findAll()).thenReturn(Collections.<Event>emptyList());
+		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
 		
 		mvc.perform(post("/events/update").with(user("Sam").roles(Security.ORGANIZER_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -261,11 +259,11 @@ public class EventsControllerTest {
 				.param("date", "2022-06-10")
 				.param("time", "23:17")				
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
-				.andExpect(view().name("/events/update")).andExpect(model().hasErrors())
+				.andExpect(view().name("events/update")).andExpect(model().hasErrors())
 				.andExpect(handler().methodName("updateEvent"));
 
 		verify(eventService, never()).save(arg.capture());
-		verify(eventService).findAll();
+		verify(venueService).findAll();
 	}
 	
 	@Test

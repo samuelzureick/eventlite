@@ -106,7 +106,7 @@ public class VenuesControllerTest {
 	}
 
 	@Test
-	public void newVenuePage() throws Exception {
+	public void getNewVenuePage() throws Exception {
 		mvc.perform(get("/venues/new").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 			.andExpect(view().name("venues/new")).andExpect(handler().methodName("newVenue"))
 			.andExpect(model().hasNoErrors());
@@ -197,16 +197,14 @@ public class VenuesControllerTest {
 	}
 
 	@Test
-	public void updateVenuePage() throws Exception {
+	public void getVenueUpdatePage() throws Exception {
 		when(venueService.findById(25)).thenReturn(Optional.of(venue));
-		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
 
 		mvc.perform(get("/venues/update/25").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 			.andExpect(view().name("venues/update")).andExpect(handler().methodName("getVenueUpdate"))
 			.andExpect(model().hasNoErrors());
 
 		verify(venueService).findById(25);
-		verify(venueService).findAll();
 	}
 
 	@Test
@@ -231,7 +229,6 @@ public class VenuesControllerTest {
 	@Test
 	public void updateVenueWithErrors() throws Exception {
 		ArgumentCaptor<Venue> arg = ArgumentCaptor.forClass(Venue.class);
-		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
 
 		mvc.perform(post("/venues/update").with(user("Ryan").roles(Security.ORGANIZER_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -240,11 +237,10 @@ public class VenuesControllerTest {
 				.param("address", "23 Manchester Road E14 3BD")
 				.param("capacity", "10")		
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
-				.andExpect(view().name("/venues/update")).andExpect(model().hasErrors())
+				.andExpect(view().name("venues/update")).andExpect(model().hasErrors())
 				.andExpect(handler().methodName("updateVenue"));
 
 		verify(venueService, never()).save(arg.capture());
-		verify(venueService).findAll();
 	}
 
 	@Test

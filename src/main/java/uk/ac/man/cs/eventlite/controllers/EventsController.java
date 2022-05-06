@@ -80,8 +80,8 @@ public class EventsController {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("event", event);
-			model.addAttribute("venues", eventService.findAll());
-			return "/events/update";
+			model.addAttribute("venues", venueService.findAll());
+			return "events/update";
 		}
 
 		eventService.save(event);

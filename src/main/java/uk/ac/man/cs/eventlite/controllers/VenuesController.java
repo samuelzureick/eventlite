@@ -129,7 +129,6 @@ public class VenuesController {
 		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
 
 		model.addAttribute("venue", venue);
-		model.addAttribute("venues", venueService.findAll());
 
 		return "venues/update";
 	}
@@ -140,8 +139,7 @@ public class VenuesController {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("venue", venue);
-			model.addAttribute("venues", venueService.findAll());
-			return "/venues/update";
+			return "venues/update";
 		}
 
 		venueService.save(venue);
