@@ -37,6 +37,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
 import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
@@ -62,7 +63,7 @@ public class EventsControllerTest {
 
 	@MockBean
 	private VenueService venueService;
-
+	
 	@Test
 	public void getIndexWhenNoEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event>emptyList());
@@ -289,5 +290,13 @@ public class EventsControllerTest {
 		verify(eventService).save(arg.capture());
 	}
 	
+	@Test
+	public void shareEvent() throws Exception{
+		mvc.perform(post("/events/25/share").with(user("Sam").roles(Security.ORGANIZER_ROLE))
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.param("text", "Test Tweet").accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(status().isFound()).andExpect(view().name("redirect:/events/25")).andExpect(handler()
+		.methodName("shareEvent")).andExpect(model().hasNoErrors());
+	}
 	
 }
