@@ -118,7 +118,6 @@ public class EventsControllerTest {
 
 	}
 	
-	
 	@Test
 	public void createNewEventWithNoVenue() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
@@ -186,8 +185,7 @@ public class EventsControllerTest {
 		
 		verify(eventService, never()).deleteById(25);
 	}
-	
-	
+
 	@Test 
 	public void deleteEventThatDoesNotExist() throws Exception {
 		doNothing().when(eventService).deleteById(any(Long.class));
@@ -252,6 +250,7 @@ public class EventsControllerTest {
 	@Test
 	public void updateEventWithErrors() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.findAll()).thenReturn(Collections.<Event>emptyList());
 		
 		mvc.perform(post("/events/update").with(user("Sam").roles(Security.ORGANIZER_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -266,6 +265,7 @@ public class EventsControllerTest {
 				.andExpect(handler().methodName("updateEvent"));
 
 		verify(eventService, never()).save(arg.capture());
+		verify(eventService).findAll();
 	}
 	
 	@Test
@@ -283,9 +283,9 @@ public class EventsControllerTest {
 				.param("venue.id", "25")
 				.param("date", "2022-06-10")
 				.param("time", "23:17")				
-				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
-				.andExpect(view().name("/events/details")).andExpect(model().hasNoErrors())
-				.andExpect(handler().methodName("updateEvent"));
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
+				.andExpect(view().name("redirect:/events/25")).andExpect(model().hasNoErrors())
+				.andExpect(handler().methodName("updateEvent")).andExpect(flash().attributeExists("ok_message"));
 
 		verify(eventService).save(arg.capture());
 	}
@@ -298,5 +298,5 @@ public class EventsControllerTest {
 		.andExpect(status().isFound()).andExpect(view().name("redirect:/events/25")).andExpect(handler()
 		.methodName("shareEvent")).andExpect(model().hasNoErrors());
 	}
-	
+
 }

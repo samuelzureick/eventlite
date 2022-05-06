@@ -80,13 +80,14 @@ public class EventsController {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("event", event);
+			model.addAttribute("venues", eventService.findAll());
 			return "/events/update";
 		}
 
 		eventService.save(event);
-		redirectAttrs.addFlashAttribute("ok_message", "Event updated.");
 
-		return "/events/details";
+		redirectAttrs.addFlashAttribute("ok_message", "Event updated.");
+		return "redirect:/events/" + event.getId();
 	}
 
 	@GetMapping("/new")
@@ -163,7 +164,6 @@ public class EventsController {
 		venue.setEmpty(venueEmpty);
 		return "redirect:/events";
 	}
-
 
 	@PostMapping("/{id}/share")
 	public String shareEvent(@PathVariable("id") long id, @RequestParam String text, Model model, RedirectAttributes ra) throws TwitterException {

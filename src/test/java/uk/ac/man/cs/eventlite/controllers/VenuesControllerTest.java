@@ -231,6 +231,7 @@ public class VenuesControllerTest {
 	@Test
 	public void updateVenueWithErrors() throws Exception {
 		ArgumentCaptor<Venue> arg = ArgumentCaptor.forClass(Venue.class);
+		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
 
 		mvc.perform(post("/venues/update").with(user("Ryan").roles(Security.ORGANIZER_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -243,6 +244,7 @@ public class VenuesControllerTest {
 				.andExpect(handler().methodName("updateVenue"));
 
 		verify(venueService, never()).save(arg.capture());
+		verify(venueService).findAll();
 	}
 
 	@Test
