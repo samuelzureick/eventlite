@@ -71,11 +71,6 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public void updateEvent(Event event) {
-		eventRepository.save(event);
-	}
-
-	@Override
 	public List<Event> splitEventPast(Iterable<Event> events){
 		List<Event> pastEvents = new ArrayList<Event>();
 		LocalDate today = LocalDate.now();

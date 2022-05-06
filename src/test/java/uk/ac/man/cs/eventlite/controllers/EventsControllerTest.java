@@ -21,7 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -61,7 +63,7 @@ public class EventsControllerTest {
 
 	@MockBean
 	private VenueService venueService;
-
+	
 	@Test
 	public void getIndexWhenNoEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event>emptyList());
@@ -115,7 +117,6 @@ public class EventsControllerTest {
 		.andExpect(model().hasNoErrors());
 
 	}
-	
 	
 	@Test
 	public void createNewEventWithNoVenue() throws Exception {
@@ -184,8 +185,7 @@ public class EventsControllerTest {
 		
 		verify(eventService, never()).deleteById(25);
 	}
-	
-	
+
 	@Test 
 	public void deleteEventThatDoesNotExist() throws Exception {
 		doNothing().when(eventService).deleteById(any(Long.class));
@@ -212,6 +212,91 @@ public class EventsControllerTest {
 		verify(eventService).findById(25);
 		verify(eventService).deleteById(25);
 	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void searchEvent() throws Exception {
+		when(eventService.listAll("search_event")).thenReturn(new ArrayList<Event>());
+		when(eventService.splitEventPast(any(List.class))).thenReturn(new ArrayList<Event>());
+		when(eventService.splitEventFuture(any(List.class))).thenReturn(new ArrayList<Event>());
+		
+		mvc.perform(get("/events/search")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("keyword", "search_event")
+				.accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("events/index")).andExpect(model().hasNoErrors())
+				.andExpect(handler().methodName("getSearchEvents"));
+		
+		verify(eventService).listAll("search_event");
+		verify(eventService).splitEventPast(any(List.class));
+		verify(eventService).splitEventFuture(any(List.class));
+		
+	}
+
+	@Test
+	public void getEventUpdatePage() throws Exception {
+		when(eventService.findById(25)).thenReturn(Optional.of(event));
+		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
+		when(event.getVenue()).thenReturn(venue);
+
+		mvc.perform(get("/events/update/25").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+		.andExpect(view().name("events/update")).andExpect(handler().methodName("getEventUpdate"))
+		.andExpect(model().hasNoErrors());
+
+		verify(eventService).findById(25);
+		verify(venueService).findAll();
+	}
+
+	@Test
+	public void updateEventWithErrors() throws Exception {
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.findAll()).thenReturn(Collections.<Event>emptyList());
+		
+		mvc.perform(post("/events/update").with(user("Sam").roles(Security.ORGANIZER_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "")  // Errors because we must state which event to update
+				.param("name", "event")
+				.param("description", "this is an test event")
+				.param("venue.id", "1")
+				.param("date", "2022-06-10")
+				.param("time", "23:17")				
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+				.andExpect(view().name("/events/update")).andExpect(model().hasErrors())
+				.andExpect(handler().methodName("updateEvent"));
+
+		verify(eventService, never()).save(arg.capture());
+		verify(eventService).findAll();
+	}
 	
+	@Test
+	public void updateEventSuccess() throws Exception {
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.findById(25)).thenReturn(Optional.of(event));
+		doNothing().when(eventService).save(any(Event.class));
+		doNothing().when(event).setVenue(any(Venue.class));
+		
+		mvc.perform(post("/events/update").with(user("Sam").roles(Security.ORGANIZER_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "25")
+				.param("name", "event")
+				.param("description", "this is an test event")
+				.param("venue.id", "25")
+				.param("date", "2022-06-10")
+				.param("time", "23:17")				
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
+				.andExpect(view().name("redirect:/events/25")).andExpect(model().hasNoErrors())
+				.andExpect(handler().methodName("updateEvent")).andExpect(flash().attributeExists("ok_message"));
+
+		verify(eventService).save(arg.capture());
+	}
 	
+	@Test
+	public void shareEvent() throws Exception{
+		mvc.perform(post("/events/25/share").with(user("Sam").roles(Security.ORGANIZER_ROLE))
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.param("text", "Test Tweet").accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(status().isFound()).andExpect(view().name("redirect:/events/25")).andExpect(handler()
+		.methodName("shareEvent")).andExpect(model().hasNoErrors());
+	}
+
 }
