@@ -213,7 +213,7 @@ public class EventsControllerTest {
 		verify(eventService).findById(25);
 		verify(eventService).deleteById(25);
 	}
-	
+
 	@Test
 	@SuppressWarnings("unchecked")
 	public void searchEvent() throws Exception {
@@ -243,6 +243,9 @@ public class EventsControllerTest {
 		mvc.perform(get("/events/update/25").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 		.andExpect(view().name("events/update")).andExpect(handler().methodName("getEventUpdate"))
 		.andExpect(model().hasNoErrors());
+
+		verify(eventService).findById(25);
+		verify(venueService).findAll();
 	}
 
 	@Test
