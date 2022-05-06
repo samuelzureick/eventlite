@@ -37,7 +37,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
 import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
@@ -236,9 +235,11 @@ public class EventsControllerTest {
 	}
 	
 	@Test
-	public void updateEventPage() throws Exception {   // Errors currently, needs fixing
+	public void getUpdatedEventPage() throws Exception {   // Errors currently, needs fixing, see HTML for events/update. There is a conversion error
 		when(eventService.findById(25)).thenReturn(Optional.of(event));
+		when(venueService.findById(any(Long.class))).thenReturn(Optional.of(venue));
 		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
+		doNothing().when(eventService).updateEvent(any(Event.class));
 		
 		mvc.perform(get("/events/update/25").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 		.andExpect(view().name("events/update")).andExpect(handler().methodName("getEventUpdate"))
