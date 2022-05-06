@@ -122,4 +122,22 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		assertTrue(futureEvents.contains(futureEvent));
 		assertFalse(futureEvents.contains(pastEvent));
 	}
+	
+	@Test
+	public void listAllTest() {
+		List<Event> eventsList = new ArrayList<Event>();
+		Iterable<Event> allEvents = eventService.listAll(null);
+		for (Event e : allEvents) {
+			eventsList.add(e);
+		}
+		assertEquals("Event Apple", eventsList.get(0).getName());
+		assertEquals("Event Alpha", eventsList.get(1).getName());
+		assertEquals("Event Beta", eventsList.get(2).getName());
+		eventsList.clear();
+		Iterable<Event> searchEvents = eventService.listAll("Apple");
+		for (Event e : searchEvents) {
+			eventsList.add(e);
+		}
+		assertEquals("Event Apple", eventsList.get(0).getName());
+	}
 }

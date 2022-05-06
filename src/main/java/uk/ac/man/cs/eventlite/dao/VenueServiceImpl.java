@@ -38,7 +38,7 @@ public class VenueServiceImpl implements VenueService {
 		if (keyword != null) {
 			return venueRepository.search(keyword);
 		}
-		return venueRepository.findAll();
+		return venueRepository.findAllByOrderByName();
 	}
 
 	@Override

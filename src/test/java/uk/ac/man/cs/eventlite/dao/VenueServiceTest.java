@@ -82,4 +82,23 @@ public class VenueServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		assertNotNull(testVenue);
 		assertEquals(venue.getName(), testVenue.getName());
 	}
+	
+	@Test
+	public void listAllTest() {
+		List<Venue> venuesList = new ArrayList<Venue>();
+		Iterable<Venue> allVenues = venueService.listAll(null);
+		for (Venue v : allVenues) {
+			venuesList.add(v);
+		}
+		for (Venue y : allVenues) {System.out.println(y.getName());}
+		assertEquals("Venue A", venuesList.get(0).getName());
+		assertEquals("Venue B", venuesList.get(1).getName());
+		assertEquals("Venue C", venuesList.get(2).getName());
+		venuesList.clear();
+		Iterable<Venue> searchVenues = venueService.listAll("B");
+		for (Venue v : searchVenues) {
+			venuesList.add(v);
+		}
+		assertEquals("Venue B", venuesList.get(0).getName());
+	}
 }
