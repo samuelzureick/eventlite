@@ -21,8 +21,6 @@ public interface EventService {
 
 	public void deleteById(long id);
 
-	public void updateEvent(Event event);
-
 	public List<Event> splitEventPast(Iterable<Event> events);
 
 	public List<Event> splitEventFuture(Iterable<Event> events);

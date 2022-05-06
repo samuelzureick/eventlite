@@ -233,19 +233,18 @@ public class EventsControllerTest {
 		verify(eventService).splitEventFuture(any(List.class));
 		
 	}
-	
+
 	@Test
-	public void getUpdatedEventPage() throws Exception {   // Errors currently, needs fixing, see HTML for events/update. There is a conversion error
+	public void getEventUpdatePage() throws Exception {
 		when(eventService.findById(25)).thenReturn(Optional.of(event));
-		when(venueService.findById(any(Long.class))).thenReturn(Optional.of(venue));
 		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
-		doNothing().when(eventService).updateEvent(any(Event.class));
-		
+		when(event.getVenue()).thenReturn(venue);
+
 		mvc.perform(get("/events/update/25").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 		.andExpect(view().name("events/update")).andExpect(handler().methodName("getEventUpdate"))
 		.andExpect(model().hasNoErrors());
 	}
-	
+
 	@Test
 	public void updateEventWithErrors() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
