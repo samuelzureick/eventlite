@@ -25,12 +25,21 @@
       <label>Time:</label>
       <input class="form-control" type="text" th:value="${{event.time}}" readonly/>
     </div>
+    
+    <form action="#" th:action="'/events/'+${event.id}+'/share'" method="post">
+        <label for="text">Share the event! <span style="color:green" th:if="${tweet != null}"><em>Success! You tweeted: </em></span><span style="color:green" th:text="${tweet}" th:if="${tweet != null}"></span></label>
+        <input class="form-control" type="text" th:value="${{event.name}}" name="text" id="text" autofocus="autofocus"/>
+      <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i>Send Tweet</button>
+    </form>
 
     <div id="map" style="width:100%;height:50vw;margin:15px 0;"></div>
     <script th:inline="javascript">
     /*<![CDATA[*/
 		var longitude = /*[[${event.venue.longitude}]]*/ -2.242631;
 		var latitude = /*[[${event.venue.latitude}]]*/ 53.480759;
+		var eventName = /*[[${event.name}]]*/ 'Event';
+    	var eventTime = /*[[${event.time}]]*/ '12:00';
+    	var eventDate = /*[[${event.date}]]*/ '2022-01-01';
 		mapboxgl.accessToken = 'pk.eyJ1IjoidGVhbWcxMCIsImEiOiJjbDE1ODIyZngwMG92M2pxczVkajF5YWQ4In0.JAscVbHj6h0TpFGWK4YU_A';
 		const map = new mapboxgl.Map({
 			container: 'map', // container ID
@@ -40,6 +49,14 @@
 		});
 		const marker = new mapboxgl.Marker()
 		.setLngLat([longitude, latitude])
+		.setPopup(
+		    new mapboxgl.Popup({ offset: 25 }) // add popups
+		      .setHTML(
+		        `<div style="text-align:center"><h4>` + eventName + `</h4>
+		        <p>Date: ` + eventDate + `
+		        <br>Starts at: ` + eventTime + `</p></div>`
+		      )
+		 )
 		.addTo(map);
     /*]]>*/
     </script>
