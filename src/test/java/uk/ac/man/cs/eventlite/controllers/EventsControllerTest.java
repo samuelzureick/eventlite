@@ -217,14 +217,14 @@ public class EventsControllerTest {
 		when(eventService.listAll("search_event")).thenReturn(Collections.<Event>emptyList());
 		when(eventService.splitEventPast(any(List.class))).thenReturn(Collections.<Event>emptyList());
 		when(eventService.splitEventFuture(any(List.class))).thenReturn(Collections.<Event>emptyList());
-		
+
 		mvc.perform(get("/events/search")
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param("keyword", "search_event")
 				.accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
-				.andExpect(view().name("events/index")).andExpect(model().hasNoErrors())
+				.andExpect(view().name("events/search")).andExpect(model().hasNoErrors())
 				.andExpect(handler().methodName("getSearchEvents"));
-		
+
 		verify(eventService).listAll("search_event");
 		verify(eventService).splitEventPast(any(List.class));
 		verify(eventService).splitEventFuture(any(List.class));

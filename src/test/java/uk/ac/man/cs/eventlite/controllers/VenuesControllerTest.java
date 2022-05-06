@@ -265,7 +265,7 @@ public class VenuesControllerTest {
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param("keyword", "search_venue")
 				.accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
-				.andExpect(view().name("venues/index")).andExpect(model().hasNoErrors())
+				.andExpect(view().name("venues/search")).andExpect(model().hasNoErrors())
 				.andExpect(handler().methodName("getSearchVenues"));
 
 		verify(venueService).listAll("search_venue");

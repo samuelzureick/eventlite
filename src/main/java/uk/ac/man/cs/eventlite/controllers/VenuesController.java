@@ -77,7 +77,7 @@ public class VenuesController {
 	public String getSearchVenues(Model model, @RequestParam String keyword) {
 		Iterable<Venue> listSearchVenues = venueService.listAll(keyword);
 		model.addAttribute("venues", listSearchVenues);
-		return "venues/index";
+		return "venues/search";
 	}
 
 	@GetMapping("/new")

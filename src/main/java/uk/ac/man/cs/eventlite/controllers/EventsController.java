@@ -145,7 +145,7 @@ public class EventsController {
 		List<Event> futureEvents = eventService.splitEventFuture(listSearchEvents);
 		model.addAttribute("pastEvents", pastEvents);
 		model.addAttribute("futureEvents", futureEvents);
-		return "events/index";
+		return "events/search";
 	}
 
 	@DeleteMapping(value = "/{id}")
