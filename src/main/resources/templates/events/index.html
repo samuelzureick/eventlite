@@ -11,7 +11,7 @@
 <body>
   <div layout:fragment="content">
     <div class="search-container">
-      <form th:action="@{/events/search}">
+      <form th:action="@{/events/search/}">
         <div class="form-row">
           <div class="form-group" style="margin:1rem 0;">
             <label for="keyword">Search:</label>
@@ -34,7 +34,7 @@
       </thead>
       <tbody>
         <tr th:each="e : ${futureEvents}">
-          <td><a th:text="${e.name}" th:href="'/events/'+${e.id}">My Event</a></td>
+          <td><a th:text="${e.name}" th:href="'/events/'+${e.id}+'/'">My Event</a></td>
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
@@ -54,14 +54,18 @@
       </thead>
       <tbody>
         <tr th:each="e : ${pastEvents}">
-          <td><a th:text="${e.name}" th:href="'/events/'+${e.id}">My Event</a></td>
+          <td><a th:text="${e.name}" th:href="'/events/'+${e.id}+'/'">My Event</a></td>
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
         </tr>
       </tbody>
     </table>
-    
+
+	<div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
+      <a class="btn btn-primary" role="button" href="/events/new/"><i class="fas fa-plus" aria-hidden="true"></i> Add a new event</a>
+    </div>
+
     <h1>Twitter Feed</h1>
     <table class="table table-striped table-hover">
       <thead>
@@ -77,10 +81,6 @@
         </tr>
       </tbody>
     </table>
-
-	<div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
-      <a class="btn btn-primary" role="button" href="/events/new"><i class="fas fa-plus" aria-hidden="true"></i> Add a new event</a>
-    </div>
 
     <div id="map" style="width:100%;height:50vw;margin:15px 0;"></div>
     <script>

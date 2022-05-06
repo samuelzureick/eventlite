@@ -163,7 +163,7 @@ public class EventsControllerTest {
 				.param("date", "2022-06-10")
 				.param("time", "23:17")				
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
-				.andExpect(view().name("redirect:/events")).andExpect(model().hasNoErrors())
+				.andExpect(view().name("redirect:/events/")).andExpect(model().hasNoErrors())
 				.andExpect(handler().methodName("createEvent")).andExpect(flash().attributeExists("ok_message"));
 
 		verify(eventService).save(arg.capture());
@@ -205,7 +205,7 @@ public class EventsControllerTest {
 	
 		mvc.perform(delete("/events/25").with(user("Sam").roles(Security.ORGANIZER_ROLE))
 		.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
-		.andExpect(view().name("redirect:/events")).andExpect(handler().methodName("deleteEvent"));
+		.andExpect(view().name("redirect:/events/")).andExpect(handler().methodName("deleteEvent"));
 		
 		verify(eventService).findById(25);
 		verify(eventService).deleteById(25);
@@ -282,7 +282,7 @@ public class EventsControllerTest {
 				.param("date", "2022-06-10")
 				.param("time", "23:17")				
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
-				.andExpect(view().name("redirect:/events/25")).andExpect(model().hasNoErrors())
+				.andExpect(view().name("redirect:/events/25/")).andExpect(model().hasNoErrors())
 				.andExpect(handler().methodName("updateEvent")).andExpect(flash().attributeExists("ok_message"));
 
 		verify(eventService).save(arg.capture());
@@ -293,7 +293,7 @@ public class EventsControllerTest {
 		mvc.perform(post("/events/25/share").with(user("Sam").roles(Security.ORGANIZER_ROLE))
 		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 		.param("text", "Test Tweet").accept(MediaType.TEXT_HTML).with(csrf()))
-		.andExpect(status().isFound()).andExpect(view().name("redirect:/events/25")).andExpect(handler()
+		.andExpect(status().isFound()).andExpect(view().name("redirect:/events/25/")).andExpect(handler()
 		.methodName("shareEvent")).andExpect(model().hasNoErrors());
 	}
 

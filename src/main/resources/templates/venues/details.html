@@ -19,10 +19,11 @@
     </div>
 
     <div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
-      <a class="btn btn-primary" role="button" th:href="'/venues/update/'+${venue.id}"><i class="fas fa-pen" aria-hidden="true"></i> Update venue</a>
-      <form th:action="@{/venues/{id}(id=${venue.id})}" th:if="${venue.empty}" th:method="delete" style="display:inline-block;">
+      <a class="btn btn-primary" role="button" th:href="'/venues/update/'+${venue.id}+'/'"><i class="fas fa-pen" aria-hidden="true"></i> Update venue</a>
+      <form th:action="@{/venues/{id}/(id=${venue.id})}" th:if="${venue.empty}" th:method="delete" style="display:inline-block;">
         <button type="submit" class="btn btn-danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
       </form>
+      <a class="btn btn-warning" role="button" href="/venues/"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
     </div>
     <!-- <label style="color:red" th:unless="${venue.empty}"><em>You cannot delete this venue as there is still an event attached.</em></label>
 	-->
@@ -38,7 +39,7 @@
       </thead>
       <tbody>
         <tr th:each="e : ${events}">
-          <td><a th:text="${e.name}" th:href="'/events/'+${e.id}">My Event</a></td>
+          <td><a th:text="${e.name}" th:href="'/events/'+${e.id}+'/'">My Event</a></td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
         </tr>

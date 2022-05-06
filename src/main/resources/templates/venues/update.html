@@ -10,7 +10,7 @@
   <div layout:fragment="content">
     <h1>Update Venue</h1>
 
-    <form action="#" th:action="@{/venues/update}" th:object="${venue}" method="post">
+    <form action="#" th:action="@{/venues/update/}" th:object="${venue}" method="post">
       <div class="form-group" th:classappend="${param.error}? has-error">
       	<input type="hidden" th:field="*{id}" name="id" id="id" th:value="${venue.id}" />
         <label for="name">Venue name: <span style="color:red" th:if="${#fields.hasErrors('name')}"><em>Invalid. Max 256 chars</em></span></label>
@@ -22,7 +22,7 @@
       </div>
 
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
-      <a class="btn btn-warning" role="button" th:href="'/venues/'+${venue.id}"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+      <a class="btn btn-warning" role="button" th:href="'/venues/'+${venue.id}+'/'"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
     </form>
   </div>
 </body>

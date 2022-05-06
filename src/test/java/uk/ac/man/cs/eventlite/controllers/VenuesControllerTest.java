@@ -123,7 +123,7 @@ public class VenuesControllerTest {
 				.param("address", "23 Manchester Road E14 3BD")
 				.param("capacity", "10")
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
-				.andExpect(view().name("redirect:/venues")).andExpect(model().hasNoErrors())
+				.andExpect(view().name("redirect:/venues/")).andExpect(model().hasNoErrors())
 				.andExpect(handler().methodName("createVenue")).andExpect(flash().attributeExists("ok_message"));
 
 		verify(venueService).save(arg.capture());
@@ -152,7 +152,7 @@ public class VenuesControllerTest {
 	
 		mvc.perform(delete("/venues/25").with(user("Ryan").roles(Security.ORGANIZER_ROLE))
 			.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
-			.andExpect(view().name("redirect:/venues")).andExpect(handler().methodName("deleteVenue"))
+			.andExpect(view().name("redirect:/venues/")).andExpect(handler().methodName("deleteVenue"))
 			.andExpect(flash().attributeExists("ok_message"));
 		
 		verify(venueService).findById(25);
@@ -179,7 +179,7 @@ public class VenuesControllerTest {
 	
 		mvc.perform(delete("/venues/25").with(user("Ryan").roles(Security.ORGANIZER_ROLE))
 			.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
-			.andExpect(view().name("redirect:/venues/25")).andExpect(handler().methodName("deleteVenue"));
+			.andExpect(view().name("redirect:/venues/25/")).andExpect(handler().methodName("deleteVenue"));
 		
 		verify(venueService).findById(25);
 		verify(eventService).findAll();
@@ -220,7 +220,7 @@ public class VenuesControllerTest {
 				.param("address", "23 Manchester Road E14 3BD")
 				.param("capacity", "10")		
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
-				.andExpect(view().name("redirect:/venues/25")).andExpect(model().hasNoErrors())
+				.andExpect(view().name("redirect:/venues/25/")).andExpect(model().hasNoErrors())
 				.andExpect(handler().methodName("updateVenue")).andExpect(flash().attributeExists("ok_message"));
 
 		verify(venueService).save(arg.capture());

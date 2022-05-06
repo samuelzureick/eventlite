@@ -90,7 +90,6 @@ public class VenueServiceTest extends AbstractTransactionalJUnit4SpringContextTe
 		for (Venue v : allVenues) {
 			venuesList.add(v);
 		}
-		for (Venue y : allVenues) {System.out.println(y.getName());}
 		assertEquals("Venue A", venuesList.get(0).getName());
 		assertEquals("Venue B", venuesList.get(1).getName());
 		assertEquals("Venue C", venuesList.get(2).getName());

@@ -87,7 +87,7 @@ public class EventsController {
 		eventService.save(event);
 
 		redirectAttrs.addFlashAttribute("ok_message", "Event updated.");
-		return "redirect:/events/" + event.getId();
+		return "redirect:/events/" + event.getId() + "/";
 	}
 
 	@GetMapping("/new")
@@ -115,7 +115,7 @@ public class EventsController {
 		eventService.save(event);
 		redirectAttrs.addFlashAttribute("ok_message", "New event added.");
 
-		return "redirect:/events";
+		return "redirect:/events/";
 	}
 
 	@GetMapping
@@ -162,7 +162,7 @@ public class EventsController {
 			}
 		}
 		venue.setEmpty(venueEmpty);
-		return "redirect:/events";
+		return "redirect:/events/";
 	}
 
 	@PostMapping("/{id}/share")
@@ -172,6 +172,6 @@ public class EventsController {
 		    ra.addAttribute("tweet", text);
 		} catch (TwitterException e) {
 		}
-		return "redirect:/events/" + id;
+		return "redirect:/events/" + id + "/";
 	}
 }

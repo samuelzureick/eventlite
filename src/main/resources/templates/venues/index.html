@@ -9,7 +9,7 @@
 <body>
   <div layout:fragment="content">
     <div class="search-container">
-      <form th:action="@{/venues/search}">
+      <form th:action="@{/venues/search/}">
         <div class="form-row">
           <div class="form-group" style="margin:1rem 0;">
             <label for="keyword">Search:</label>
@@ -31,7 +31,7 @@
       </thead>
       <tbody>
         <tr th:each="v : ${venues}">
-          <td><a th:text="${v.name}" th:href="'/venues/'+${v.id}">My Venue</a></td>
+          <td><a th:text="${v.name}" th:href="'/venues/'+${v.id}+'/'">My Venue</a></td>
           <td th:text="${v.address}">Venue Address</td>
           <td th:text="${v.capacity}">Venue capacity</td>
         </tr>
@@ -39,7 +39,7 @@
     </table>
 
     <div sec:authorize="hasAnyRole('ORGANIZER', 'ADMINISTRATOR')">
-      <a class="btn btn-primary" role="button" href="/venues/new"><i class="fas fa-plus" aria-hidden="true"></i> Add a new venue</a>
+      <a class="btn btn-primary" role="button" href="/venues/new/"><i class="fas fa-plus" aria-hidden="true"></i> Add a new venue</a>
     </div>
   </div>
 </body>

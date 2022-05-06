@@ -102,7 +102,7 @@ public class VenuesController {
 		venueService.save(venue);
 		redirectAttrs.addFlashAttribute("ok_message", "New venue added.");
 
-		return "redirect:/venues";
+		return "redirect:/venues/";
 	}
 	
 	@DeleteMapping(value = "/{id}")
@@ -118,10 +118,10 @@ public class VenuesController {
 		if (venueEmpty) {
 			venueService.deleteById(id);
 			redirectAttrs.addFlashAttribute("ok_message", "Venue deleted.");
-			return "redirect:/venues";
+			return "redirect:/venues/";
 		}
 
-		return "redirect:/venues/" + venue.getId();
+		return "redirect:/venues/" + venue.getId() + "/";
 	}
 	
 	@GetMapping("/update/{id}")
@@ -145,7 +145,7 @@ public class VenuesController {
 		venueService.save(venue);
 
 		redirectAttrs.addFlashAttribute("ok_message", "Venue updated.");
-		return "redirect:/venues/" + venue.getId();
+		return "redirect:/venues/" + venue.getId() + "/";
 	}
 
 }

@@ -10,7 +10,7 @@
   <div layout:fragment="content">
     <h1>Update Event</h1>
 
-    <form action="#" th:action="@{/events/update}" th:object="${event}" method="post">
+    <form action="#" th:action="@{/events/update/}" th:object="${event}" method="post">
       <div class="form-group" th:classappend="${param.error}? has-error">
       	<input type="hidden" th:field="*{id}" name="id" id="id" th:value="${event.id}" />
         <label for="name">Event name: <span style="color:red" th:if="${#fields.hasErrors('name')}"><em>Invalid. Max 256 chars</em></span></label>
@@ -34,7 +34,7 @@
       </div>
 
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
-      <a class="btn btn-warning" role="button" th:href="'/events/'+${event.id}"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+      <a class="btn btn-warning" role="button" th:href="'/events/'+${event.id}+'/'"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
     </form>
   </div>
 </body>
