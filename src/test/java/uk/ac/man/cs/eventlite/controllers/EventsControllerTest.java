@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -291,10 +292,10 @@ public class EventsControllerTest {
 	@Test
 	public void shareEvent() throws Exception{
 		mvc.perform(post("/events/25/share").with(user("Sam").roles(Security.ORGANIZER_ROLE))
-		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-		.param("text", "Test Tweet").accept(MediaType.TEXT_HTML).with(csrf()))
-		.andExpect(status().isFound()).andExpect(view().name("redirect:/events/25/")).andExpect(handler()
-		.methodName("shareEvent")).andExpect(model().hasNoErrors());
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("text", "Test Tweet " + new Date().toString()).accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(status().isFound()).andExpect(view().name("redirect:/events/25/")).andExpect(handler()
+				.methodName("shareEvent")).andExpect(model().hasNoErrors());
 	}
 
 }
