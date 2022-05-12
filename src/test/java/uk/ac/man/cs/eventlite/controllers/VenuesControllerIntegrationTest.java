@@ -97,6 +97,52 @@ public class VenuesControllerIntegrationTest extends AbstractTransactionalJUnit4
 	}
 
 	@Test
+	public void createNewVenueWithNoData() {
+		String[] tokens = login();
+
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_csrf", tokens[0]);
+
+		client.post().uri("/venues/new").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).cookies(cookies -> {
+					cookies.add(SESSION_KEY, tokens[1]);
+				}).exchange().expectStatus().isOk().expectHeader()
+				.contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class).consumeWith(result -> {
+					assertThat(result.getResponseBody(), containsString("Add a new venue"));
+				});
+	}
+
+	@Test
+	public void createNewVenueWithBadData() {
+		String[] tokens = login();
+
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_csrf", tokens[0]);
+		form.add("name", "");
+		form.add("address", "an invalid address");
+		form.add("capacity", "-1");
+
+		client.post().uri("/venues/new").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).cookies(cookies -> {
+					cookies.add(SESSION_KEY, tokens[1]);
+				}).exchange().expectStatus().isOk().expectHeader()
+				.contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class).consumeWith(result -> {
+					assertThat(result.getResponseBody(), containsString("Add a new venue"));
+				});
+	}
+
+	@Test
+	public void createNewVenueUnauthorised() {
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("name", "venue");
+		form.add("address", "23 Manchester Road E14 3BD");
+		form.add("capacity", "10");
+
+		client.post().uri("/venues/new").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/sign-in"));
+	}
+
+	@Test
 	public void deleteVenue() {
 		String[] tokens = login();
 
@@ -108,6 +154,29 @@ public class VenuesControllerIntegrationTest extends AbstractTransactionalJUnit4
 				.bodyValue(form).cookies(cookies -> {
 					cookies.add(SESSION_KEY, tokens[1]);
 				}).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/venues/"));
+	}
+
+	@Test
+	public void deleteVenueNotExist() {
+		String[] tokens = login();
+
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_csrf", tokens[0]);
+		form.add("_method", "delete");
+
+		client.post().uri("/venues/99").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).cookies(cookies -> {
+					cookies.add(SESSION_KEY, tokens[1]);
+				}).exchange().expectStatus().isNotFound();
+	}
+
+	@Test
+	public void deleteVenueUnauthorised() {
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_method", "delete");
+
+		client.post().uri("/venues/2").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/sign-in"));
 	}
 
 	@Test
@@ -134,6 +203,38 @@ public class VenuesControllerIntegrationTest extends AbstractTransactionalJUnit4
 				.bodyValue(form).cookies(cookies -> {
 					cookies.add(SESSION_KEY, tokens[1]);
 				}).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/venues/3/"));
+	}
+
+	@Test
+	public void updateVenueWithBadData() {
+		String[] tokens = login();
+
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_csrf", tokens[0]);
+		form.add("id", "99");
+		form.add("name", "");
+		form.add("address", "an invalid address");
+		form.add("capacity", "-1");
+
+		client.post().uri("/venues/update").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).cookies(cookies -> {
+					cookies.add(SESSION_KEY, tokens[1]);
+				}).exchange().expectStatus().isOk().expectHeader()
+				.contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class).consumeWith(result -> {
+					assertThat(result.getResponseBody(), containsString("Update Venue"));
+				});
+	}
+
+	@Test
+	public void updateVenueUnauthorised() {
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("id", "3");
+		form.add("name", "venue updated");
+		form.add("address", "23 Manchester Road E14 3BD");
+		form.add("capacity", "10");
+
+		client.post().uri("/venues/update").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/sign-in"));
 	}
 
 	@Test

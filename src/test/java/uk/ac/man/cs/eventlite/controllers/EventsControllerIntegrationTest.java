@@ -101,6 +101,59 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 	}
 
 	@Test
+	public void createNewEventWithNoData() {
+		String[] tokens = login();
+
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_csrf", tokens[0]);
+
+		client.post().uri("/events/new").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).cookies(cookies -> {
+					cookies.add(SESSION_KEY, tokens[1]);
+				}).exchange().expectStatus().isOk().expectHeader()
+				.contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class).consumeWith(result -> {
+					assertThat(result.getResponseBody(), containsString("Add a new event"));
+				});
+	}
+
+	@Test
+	public void createNewEventWithBadData() {
+		String[] tokens = login();
+
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_csrf", tokens[0]);
+		form.add("name", "");
+		String desc = "";
+		for (int i = 0; i < 510; i++)
+			desc += "x";
+		form.add("description", desc);
+		form.add("venue", "99");
+		form.add("date", "");
+		form.add("time", "");
+
+		client.post().uri("/events/new").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).cookies(cookies -> {
+					cookies.add(SESSION_KEY, tokens[1]);
+				}).exchange().expectStatus().isOk().expectHeader()
+				.contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class).consumeWith(result -> {
+					assertThat(result.getResponseBody(), containsString("Add a new event"));
+				});
+	}
+
+	@Test
+	public void createNewEventUnauthorised() {
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("name", "event");
+		form.add("description", "this is an test event");
+		form.add("venue", "1");
+		form.add("date", "2022-06-10");
+		form.add("time", "23:17");
+
+		client.post().uri("/events/new").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/sign-in"));
+	}
+
+	@Test
 	public void deleteEvent() {
 		String[] tokens = login();
 
@@ -112,6 +165,29 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 				.bodyValue(form).cookies(cookies -> {
 					cookies.add(SESSION_KEY, tokens[1]);
 				}).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/events/"));
+	}
+
+	@Test
+	public void deleteEventNotExist() {
+		String[] tokens = login();
+
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_csrf", tokens[0]);
+		form.add("_method", "delete");
+
+		client.post().uri("/events/99").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).cookies(cookies -> {
+					cookies.add(SESSION_KEY, tokens[1]);
+				}).exchange().expectStatus().isNotFound();
+	}
+
+	@Test
+	public void deleteEventUnauthorised() {
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_method", "delete");
+
+		client.post().uri("/events/5").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/sign-in"));
 	}
 
 	@Test
@@ -140,6 +216,45 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 				.bodyValue(form).cookies(cookies -> {
 					cookies.add(SESSION_KEY, tokens[1]);
 				}).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/events/6/"));
+	}
+
+	@Test
+	public void updateEventWithBadData() {
+		String[] tokens = login();
+
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_csrf", tokens[0]);
+		form.add("id", "99");
+		form.add("name", "");
+		String desc = "";
+		for (int i = 0; i < 510; i++)
+			desc += "x";
+		form.add("description", desc);
+		form.add("venue", "1");
+		form.add("date", "");
+		form.add("time", "");
+
+		client.post().uri("/events/update").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).cookies(cookies -> {
+					cookies.add(SESSION_KEY, tokens[1]);
+				}).exchange().expectStatus().isOk().expectHeader()
+				.contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class).consumeWith(result -> {
+					assertThat(result.getResponseBody(), containsString("Update Event"));
+				});
+	}
+
+	@Test
+	public void updateEventUnauthorised() {
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("id", "6");
+		form.add("name", "event updated");
+		form.add("description", "this is an test event");
+		form.add("venue", "1");
+		form.add("date", "2022-06-10");
+		form.add("time", "23:17");
+
+		client.post().uri("/events/update").accept(MediaType.TEXT_HTML).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.bodyValue(form).exchange().expectStatus().isFound().expectHeader().value("Location", endsWith("/sign-in"));
 	}
 
 	@Test
