@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import uk.ac.man.cs.eventlite.assemblers.EventModelAssembler;
 import uk.ac.man.cs.eventlite.assemblers.VenueModelAssembler;
+import uk.ac.man.cs.eventlite.config.Hateoas;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
@@ -54,7 +55,8 @@ public class VenuesControllerApi {
 	@GetMapping
 	public CollectionModel<EntityModel<Venue>> getAllVenues() {
 		return venueAssembler.toCollectionModel(venueService.findAll())
-				.add(linkTo(methodOn(VenuesControllerApi.class).getAllVenues()).withSelfRel());
+				.add(linkTo(methodOn(VenuesControllerApi.class).getAllVenues()).withSelfRel())
+				.add(linkTo(Hateoas.class).slash("api").slash("profile").slash("venues").withRel("profile"));
 	}
 
 	@GetMapping("/{id}")
