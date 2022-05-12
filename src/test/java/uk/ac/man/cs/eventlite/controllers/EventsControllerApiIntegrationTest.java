@@ -48,4 +48,22 @@ public class EventsControllerApiIntegrationTest extends AbstractTransactionalJUn
 				.expectHeader().contentType(MediaType.APPLICATION_JSON).expectBody().jsonPath("$.error")
 				.value(containsString("event 99")).jsonPath("$.id").isEqualTo(99);
 	}
+	
+	@Test
+	public void getEvent() {
+		client.get().uri("/events/4").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk()
+				.expectHeader().contentType(MediaType.APPLICATION_JSON).expectBody()
+				.jsonPath("$.name").value(equalTo("Event Alpha"))
+				.jsonPath("$._links.self.href").value(endsWith("/api/events/4"))
+				.jsonPath("$._links.event.href").value(endsWith("/api/events/4"))
+				.jsonPath("$._links.venue.href").value(endsWith("/api/events/4/venue"));
+	}
+	
+	@Test
+	public void getEventVenue() {
+		client.get().uri("/events/4/venue").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk()
+				.expectHeader().contentType(MediaType.APPLICATION_JSON).expectBody()
+				.jsonPath("$.name").value(equalTo("Venue B"));
+	}
+	
 }
