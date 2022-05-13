@@ -99,6 +99,14 @@ public class EventsControllerApiTest {
 
 		verify(eventService).findById(0);
 	}
+	
+	@Test
+	public void getEventVenueNoIndex() throws Exception {
+		mvc.perform(get("/api/events/1/venue").accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound())
+				.andExpect(handler().methodName("getEventVenue"));
+
+		verify(eventService).findById(1);
+	}
 
 	@Test
 	public void getEventVenue() throws Exception {

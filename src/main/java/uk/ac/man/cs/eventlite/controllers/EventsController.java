@@ -106,7 +106,6 @@ public class EventsController {
 			Model model, RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors()) {
-			System.out.println(errors);
 			model.addAttribute("event", event);
 			model.addAttribute("venues", venueService.findAll());
 			return "events/new";
@@ -128,7 +127,6 @@ public class EventsController {
 			ResponseList<Status> tweets = twitter.getUserTimeline();
 			model.addAttribute("tweets", tweets.subList(0, Math.min(5, tweets.size())));
 		} catch (TwitterException e) {
-			e.printStackTrace();
 		}
 		
 		model.addAttribute("pastEvents", pastEvents);

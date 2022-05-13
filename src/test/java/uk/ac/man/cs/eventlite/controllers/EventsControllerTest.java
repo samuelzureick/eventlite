@@ -231,6 +231,14 @@ public class EventsControllerTest {
 		verify(eventService).splitEventFuture(any(List.class));
 		
 	}
+	
+	@Test
+	public void getEventUpdatePageNotFound() throws Exception {
+		mvc.perform(get("/events/update/25").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
+		.andExpect(handler().methodName("getEventUpdate"))
+		.andExpect(model().hasNoErrors());
+		verify(eventService).findById(25);
+	}
 
 	@Test
 	public void getEventUpdatePage() throws Exception {
@@ -245,7 +253,7 @@ public class EventsControllerTest {
 		verify(eventService).findById(25);
 		verify(venueService).findAll();
 	}
-
+	
 	@Test
 	public void updateEventWithErrors() throws Exception {
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);

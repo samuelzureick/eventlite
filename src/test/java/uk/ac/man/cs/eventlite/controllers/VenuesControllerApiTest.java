@@ -106,6 +106,13 @@ public class VenuesControllerApiTest {
 
 		verify(venueService).findById(0);
 	}
+	
+	@Test
+	public void getRelatedEventsNotFound() throws Exception {
+		mvc.perform(get("/api/venues/0/events").accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound())
+		.andExpect(handler().methodName("getRelatedEvents"));
+		verify(venueService).findById(0);
+	}
 
 	@Test
 	public void getRelatedEvents() throws Exception {
@@ -131,6 +138,13 @@ public class VenuesControllerApiTest {
 
 		verify(venueService).findById(0);
 		verify(eventService).findAll();
+	}
+	
+	@Test
+	public void getNext3EventsNotFound() throws Exception {
+		mvc.perform(get("/api/venues/0/next3events").accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound())
+				.andExpect(handler().methodName("getNext3Events"));
+		verify(venueService).findById(0);
 	}
 
 	@Test

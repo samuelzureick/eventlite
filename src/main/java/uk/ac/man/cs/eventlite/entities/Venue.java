@@ -121,9 +121,7 @@ public class Venue {
 			}
 
 			@Override
-			public void onFailure(Call<GeocodingResponse> call, Throwable t) {
-				System.out.println(t);			
-			}
+			public void onFailure(Call<GeocodingResponse> call, Throwable t) {}
 		}
 
 		GeoResponse geoResponse = new GeoResponse();
@@ -131,9 +129,7 @@ public class Venue {
 
 		try {
 			Thread.sleep(1000L);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		} catch (InterruptedException e) {}
 		setLongitude(geoResponse.resultPoint.longitude());
 		setLatitude(geoResponse.resultPoint.latitude());
 	}
