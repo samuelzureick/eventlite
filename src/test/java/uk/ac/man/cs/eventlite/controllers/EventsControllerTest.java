@@ -109,6 +109,28 @@ public class EventsControllerTest {
 		
 		verify(eventService).findById(25);
 	}
+
+	@Test
+	public void getEventFoundFromRedirect () throws Exception {
+		Event e = new Event();
+		e.setId(25);
+		e.setName("event");
+		e.setVenue(venue);
+		e.setTime(LocalTime.MIDNIGHT);
+		e.setDate(LocalDate.now());
+
+		when(eventService.findById(25)).thenReturn(Optional.of(e));
+
+		mvc.perform(get("/events/25").contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("tweet", "test tweet").param("emsg", "test error message")
+				.accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("events/details")).andExpect(handler().methodName("getEvent"))
+				.andExpect(model().hasNoErrors()).andExpect(model().attribute("event", e))
+				.andExpect(model().attribute("tweet", "test tweet"))
+				.andExpect(model().attribute("emsg", "test error message"));
+		
+		verify(eventService).findById(25);
+	}
 	
 	@Test
 	public void getNewEventPage() throws Exception {
@@ -299,11 +321,21 @@ public class EventsControllerTest {
 	
 	@Test
 	public void shareEvent() throws Exception{
+		String status = "Test Tweet " + new Date().toString();
+		
 		mvc.perform(post("/events/25/share").with(user("Sam").roles(Security.ORGANIZER_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-				.param("text", "Test Tweet " + new Date().toString()).accept(MediaType.TEXT_HTML).with(csrf()))
+				.param("text", status).accept(MediaType.TEXT_HTML).with(csrf()))
 				.andExpect(status().isFound()).andExpect(view().name("redirect:/events/25/")).andExpect(handler()
-				.methodName("shareEvent")).andExpect(model().hasNoErrors());
+				.methodName("shareEvent")).andExpect(model().hasNoErrors())
+				.andExpect(model().attribute("tweet", status));
+
+		mvc.perform(post("/events/25/share").with(user("Sam").roles(Security.ORGANIZER_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("text", status).accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(status().isFound()).andExpect(view().name("redirect:/events/25/")).andExpect(handler()
+				.methodName("shareEvent")).andExpect(model().hasNoErrors())
+				.andExpect(model().attribute("emsg", "Status is a duplicate."));
 	}
 
 }

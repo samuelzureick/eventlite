@@ -53,12 +53,17 @@ public class EventsController {
 	}
 
 	@GetMapping("/{id}")
-	public String getEvent(@PathVariable("id") long id, Model model, @RequestParam("tweet") Optional<String> tweet) {
+	public String getEvent(@PathVariable("id") long id, Model model,
+			@RequestParam("tweet") Optional<String> tweet, @RequestParam("emsg") Optional<String> emsg) {
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
-		
-		if(tweet.isPresent()) {
+
+		if (tweet.isPresent()) {
 			model.addAttribute("tweet", tweet.get());
 		}
+		if (emsg.isPresent()) {
+			model.addAttribute("emsg", emsg.get());
+		}
+
 		model.addAttribute("event", event);
 
 		return "events/details";
@@ -126,9 +131,8 @@ public class EventsController {
 		try {
 			ResponseList<Status> tweets = twitter.getUserTimeline();
 			model.addAttribute("tweets", tweets.subList(0, Math.min(5, tweets.size())));
-		} catch (TwitterException e) {
-		}
-		
+		} catch (TwitterException e) {}
+
 		model.addAttribute("pastEvents", pastEvents);
 		model.addAttribute("futureEvents", futureEvents);
 		model.addAttribute("venues", venueService.findAll());
@@ -169,7 +173,9 @@ public class EventsController {
 		    twitter.updateStatus(text);
 		    ra.addAttribute("tweet", text);
 		} catch (TwitterException e) {
+			ra.addAttribute("emsg", e.getErrorMessage());
 		}
 		return "redirect:/events/" + id + "/";
 	}
+
 }
