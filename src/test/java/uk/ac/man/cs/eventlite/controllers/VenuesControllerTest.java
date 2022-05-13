@@ -197,6 +197,15 @@ public class VenuesControllerTest {
 	}
 
 	@Test
+	public void getVenueUpdatePageNotFound() throws Exception {
+		mvc.perform(get("/venues/update/25").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
+				.andExpect(handler().methodName("getVenueUpdate"))
+				.andExpect(model().hasNoErrors());
+
+		verify(venueService).findById(25);
+	}
+
+	@Test
 	public void getVenueUpdatePage() throws Exception {
 		when(venueService.findById(25)).thenReturn(Optional.of(venue));
 
